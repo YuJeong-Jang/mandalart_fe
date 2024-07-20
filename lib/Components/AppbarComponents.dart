@@ -7,23 +7,30 @@ class AppbarComponents extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return new AppBar(
-      title: Text(title),
-      backgroundColor: Colors.green,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.of(context).pop();
+      title: InkWell(
+        onTap: () {
+          while (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
         },
+        child: Text(title),
       ),
+      backgroundColor: Colors.green,
+      // leading: IconButton(
+      //   icon: Icon(Icons.arrow_back),
+      //   onPressed: () {
+      //     Navigator.of(context).pop();
+      //   },
+      // ),
       actions: [
-        IconButton(
-          icon: Icon(Icons.home),
-          onPressed: () {
-            while (Navigator.canPop(context)) {
-              Navigator.pop(context);
-            }
-          },
-        )
+        // IconButton(
+        //   icon: Icon(Icons.home),
+        //   onPressed: () {
+        //     while (Navigator.canPop(context)) {
+        //       Navigator.pop(context);
+        //     }
+        //   },
+        // )
       ],
     );
   }
