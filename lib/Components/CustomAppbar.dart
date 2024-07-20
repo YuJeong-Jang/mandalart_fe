@@ -9,21 +9,21 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return new AppBar(
-      title: InkWell(
-        onTap: () {
-          while (Navigator.canPop(context)) {
-            Navigator.pop(context);
-          }
-        },
-        child: Text(
-          title,
-          style: TextStyle(color: Colors.white),
+        title: InkWell(
+          onTap: () {
+            while (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            }
+          },
+          child: Text(
+            title,
+            style: TextStyle(color: Colors.white),
+          ),
         ),
-      ),
-      backgroundColor: DefaultComponents.achive75(),
-      centerTitle: true,
-      elevation: 0,
-    );
+        backgroundColor: DefaultComponents.achive75(),
+        centerTitle: true,
+        elevation: 0,
+        leading: null);
   }
 
   @override

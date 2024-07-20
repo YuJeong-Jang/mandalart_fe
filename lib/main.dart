@@ -32,24 +32,24 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
             useMaterial3: true,
           ),
-          home: MainPage()
-          // FlutterSplashScreen.fadeIn(
-          //   backgroundColor: DefaultComponents.black(),
-          //   onInit: () {
-          //     print("On Init");
-          //   },
-          //   onEnd: () {
-          //     print("On End");
-          //   },
-          //   childWidget: SizedBox(
-          //     child: Image.asset(
-          //       'icons/taegu_sunhwa.jpeg',
-          //     ),
-          //   ),
-          //   onAnimationEnd: () => print("On Fade In End"),
-          //   nextScreen: NavigationSwitcher(),
-          // )
-          ),
+          home:
+              //  MainPage()
+              FlutterSplashScreen.fadeIn(
+            backgroundColor: DefaultComponents.black(),
+            onInit: () {
+              print("On Init");
+            },
+            onEnd: () {
+              print("On End");
+            },
+            childWidget: SizedBox(
+              child: Image.asset(
+                'icons/taegu_sunhwa.jpeg',
+              ),
+            ),
+            onAnimationEnd: () => print("On Fade In End"),
+            nextScreen: NavigationSwitcher(),
+          )),
     );
   }
 }
