@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/NavigationSwitcher.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
+import 'package:make_me_better_mandalart_fe/View/ChangeMyInfo.dart';
 import 'package:make_me_better_mandalart_fe/View/Join.dart';
 import 'package:make_me_better_mandalart_fe/View/Login.dart';
 import 'package:make_me_better_mandalart_fe/View/MainPage.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
             useMaterial3: true,
           ),
-          home: Login()
+          home: ChangeMyInfo()
           // FlutterSplashScreen.fadeIn(
           //   backgroundColor: DefaultComponents.black(),
           //   onInit: () {
