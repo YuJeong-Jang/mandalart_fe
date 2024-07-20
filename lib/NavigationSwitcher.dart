@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
-import 'package:make_me_better_mandalart_fe/View/Login.dart';
+import 'package:make_me_better_mandalart_fe/View/Welcome.dart';
 import 'package:make_me_better_mandalart_fe/View/MainPage.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +33,7 @@ class _NavigationSwitcherState extends State<NavigationSwitcher> {
             child: CircularProgressIndicator(),
           );
         case NavigationStateEnum.auth:
-          return Login();
+          return Welcome();
         case NavigationStateEnum.home:
           return MainPage();
         default:

@@ -1,10 +1,11 @@
 import "package:flutter/material.dart";
 import "package:make_me_better_mandalart_fe/Components/DefaultComponents.dart";
 
-class AppbarComponents extends StatelessWidget implements PreferredSizeWidget {
-  String title = '메인';
+class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
 
-  AppbarComponents({super.key, required this.title});
+  CustomAppbar({super.key, required this.title});
+
   @override
   Widget build(BuildContext context) {
     return new AppBar(
@@ -14,11 +15,14 @@ class AppbarComponents extends StatelessWidget implements PreferredSizeWidget {
             Navigator.pop(context);
           }
         },
-        child: Text(title),
+        child: Text(
+          title,
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      backgroundColor: DefaultComponents.green(),
-      actions: [
-      ],
+      backgroundColor: DefaultComponents.achive75(),
+      centerTitle: true,
+      elevation: 0,
     );
   }
 

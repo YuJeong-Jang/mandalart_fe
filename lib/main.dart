@@ -1,5 +1,6 @@
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/NavigationSwitcher.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
 import 'package:make_me_better_mandalart_fe/View/MainPage.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
           ),
           home: FlutterSplashScreen.fadeIn(
-            backgroundColor: Colors.black,
+            backgroundColor: DefaultComponents.black(),
             onInit: () {
               print("On Init");
             },
@@ -37,12 +38,8 @@ class MyApp extends StatelessWidget {
               print("On End");
             },
             childWidget: SizedBox(
-              height: 200,
-              width: 200,
-              child: Icon(
-                Icons.ac_unit_outlined,
-                color: Colors.white,
-                size: 200.0,
+              child: Image.asset(
+                'icons/taegu_sunhwa.jpeg',
               ),
             ),
             onAnimationEnd: () => print("On Fade In End"),
