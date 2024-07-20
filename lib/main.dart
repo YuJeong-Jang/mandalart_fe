@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
             useMaterial3: true,
           ),
-          home: Join()
+          home: Login()
           // FlutterSplashScreen.fadeIn(
           //   backgroundColor: DefaultComponents.black(),
           //   onInit: () {
