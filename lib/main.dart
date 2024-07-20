@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/NavigationSwitcher.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
+import 'package:make_me_better_mandalart_fe/View/Join.dart';
+import 'package:make_me_better_mandalart_fe/View/Login.dart';
 import 'package:make_me_better_mandalart_fe/View/MainPage.dart';
 import 'package:provider/provider.dart';
 
@@ -29,22 +31,24 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
             useMaterial3: true,
           ),
-          home: FlutterSplashScreen.fadeIn(
-            backgroundColor: DefaultComponents.black(),
-            onInit: () {
-              print("On Init");
-            },
-            onEnd: () {
-              print("On End");
-            },
-            childWidget: SizedBox(
-              child: Image.asset(
-                'icons/taegu_sunhwa.jpeg',
-              ),
-            ),
-            onAnimationEnd: () => print("On Fade In End"),
-            nextScreen: NavigationSwitcher(),
-          )),
+          home: Join()
+          // FlutterSplashScreen.fadeIn(
+          //   backgroundColor: DefaultComponents.black(),
+          //   onInit: () {
+          //     print("On Init");
+          //   },
+          //   onEnd: () {
+          //     print("On End");
+          //   },
+          //   childWidget: SizedBox(
+          //     child: Image.asset(
+          //       'icons/taegu_sunhwa.jpeg',
+          //     ),
+          //   ),
+          //   onAnimationEnd: () => print("On Fade In End"),
+          //   nextScreen: NavigationSwitcher(),
+          // )
+          ),
     );
   }
 }
