@@ -112,6 +112,7 @@ class _Login extends State<Login> {
         child: Scaffold(
             appBar: CustomAppbar(
               title: '로그인',
+              leading: true,
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,

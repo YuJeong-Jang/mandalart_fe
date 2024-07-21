@@ -143,6 +143,7 @@ class _Join extends State<Join> {
         child: Scaffold(
             appBar: CustomAppbar(
               title: '회원가입',
+              leading: true,
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -191,7 +192,7 @@ class _Join extends State<Join> {
                     child: Container(
                         padding: EdgeInsets.all(5),
                         margin: EdgeInsets.only(top: 15),
-                        width: 100,
+                        width: 100, 
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(

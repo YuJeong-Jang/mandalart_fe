@@ -7,6 +7,7 @@ import 'package:make_me_better_mandalart_fe/View/ChangeMyInfo.dart';
 import 'package:make_me_better_mandalart_fe/View/Join.dart';
 import 'package:make_me_better_mandalart_fe/View/Login.dart';
 import 'package:make_me_better_mandalart_fe/View/MainPage.dart';
+import 'package:make_me_better_mandalart_fe/View/Register.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -30,26 +31,27 @@ class MyApp extends StatelessWidget {
           title: 'make me better',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+            fontFamily: 'Pretendard',
             useMaterial3: true,
           ),
-          home:
-              //  MainPage()
-              FlutterSplashScreen.fadeIn(
-            backgroundColor: DefaultComponents.black(),
-            onInit: () {
-              print("On Init");
-            },
-            onEnd: () {
-              print("On End");
-            },
-            childWidget: SizedBox(
-              child: Image.asset(
-                'icons/taegu_sunhwa.jpeg',
-              ),
-            ),
-            onAnimationEnd: () => print("On Fade In End"),
-            nextScreen: NavigationSwitcher(),
-          )),
+          home: Register()
+          //     FlutterSplashScreen.fadeIn(
+          //   backgroundColor: DefaultComponents.black(),
+          //   onInit: () {
+          //     print("On Init");
+          //   },
+          //   onEnd: () {
+          //     print("On End");
+          //   },
+          //   childWidget: SizedBox(
+          //     child: Image.asset(
+          //       'icons/taegu_sunhwa.jpeg',
+          //     ),
+          //   ),
+          //   onAnimationEnd: () => print("On Fade In End"),
+          //   nextScreen: NavigationSwitcher(),
+          // )
+          ),
     );
   }
 }

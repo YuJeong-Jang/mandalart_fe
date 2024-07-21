@@ -10,6 +10,7 @@ class Welcome extends StatelessWidget {
     return Scaffold(
         appBar: CustomAppbar(
           title: 'welcome to "make me better"!',
+          leading: false,
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,

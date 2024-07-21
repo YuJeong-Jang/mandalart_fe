@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
+import 'package:make_me_better_mandalart_fe/View/MainDrawer.dart';
+import 'package:make_me_better_mandalart_fe/View/Register.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -13,6 +15,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPage extends State<MainPage> {
+  late GlobalKey<ScaffoldState> _drawerKey;
+
   String nickName = '나의 닉네임';
   double todayRate = 78.4;
   double totalRate = 25.7;
@@ -37,6 +41,7 @@ class _MainPage extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+    _drawerKey = GlobalKey();
     setState(() {
       todayPercent = todayRate / 100;
       totalPercent = totalRate / 100;
@@ -71,10 +76,80 @@ class _MainPage extends State<MainPage> {
     }
   }
 
+  Widget missionsList() {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: 4,
+      itemBuilder: (context, index) {
+        String mission = missions[index].keys.firstOrNull;
+        return Container(
+          margin: EdgeInsets.all(5),
+          padding: EdgeInsets.all(3),
+          width: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              border: Border.all(color: Colors.green, width: 3.0)),
+          child: mission == ''
+              ? InkWell(
+                  onTap: () async {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Register()));
+                  },
+                  child: Icon(Icons.add))
+              : Center(
+                  child: Text(
+                  mission,
+                  style: TextStyle(fontSize: 12),
+                  textAlign: TextAlign.center,
+                )), //12글자까지 받기
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return Container();
+      },
+    );
+  }
+
+  Widget itemsGrid() {
+    return GridView.builder(
+      itemCount: 16,
+      itemBuilder: (context, index) {
+        String action = actions[index];
+        return Container(
+            margin: EdgeInsets.all(5),
+            padding: EdgeInsets.all(3),
+            width: 80,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                border: Border.all(color: Colors.green, width: 3.0)),
+            child: action == ''
+                ? InkWell(
+                    onTap: () async {
+                      await MMBUtils.oneButtonAlert(
+                          context, " ", "api 만들면 인서트 작업 필요");
+                    },
+                    child: Icon(Icons.add))
+                : Center(
+                    child: Text(
+                    action,
+                    style: TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  )));
+      },
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4, childAspectRatio: 1 / 1),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppbar(title: nickName),
+        appBar: CustomAppbar(
+          title: nickName,
+          leading: false,
+        ),
+        key: _drawerKey,
+        drawer: MainDrawer(),
         body: SafeArea(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -135,67 +210,10 @@ class _MainPage extends State<MainPage> {
                 height: 60,
                 child: Container(
                     width: MediaQuery.of(context).size.width,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        String mission = missions[index].keys.firstOrNull;
-                        return Container(
-                          margin: EdgeInsets.all(5),
-                          padding: EdgeInsets.all(3),
-                          width: 80,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              border:
-                                  Border.all(color: Colors.green, width: 3.0)),
-                          child: mission == ''
-                              ? Icon(Icons.add)
-                              : Center(
-                                  child: Text(
-                                  mission,
-                                  style: TextStyle(fontSize: 12),
-                                  textAlign: TextAlign.center,
-                                )), //12글자까지 받기
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Container();
-                      },
-                    ))),
+                    child: missionsList())),
             Expanded(
                 child: Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: GridView.builder(
-                      itemCount: 16,
-                      itemBuilder: (context, index) {
-                        String action = actions[index];
-                        return Container(
-                            margin: EdgeInsets.all(5),
-                            padding: EdgeInsets.all(3),
-                            width: 80,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                border: Border.all(
-                                    color: Colors.green, width: 3.0)),
-                            child: action == ''
-                                ? InkWell(
-                                    onTap: () async {
-                                      await MMBUtils.oneButtonAlert(
-                                          context, " ", "api 만들면 인서트 작업 필요");
-                                    },
-                                    child: Icon(Icons.add))
-                                : Center(
-                                    child: Text(
-                                    action,
-                                    style: TextStyle(fontSize: 12),
-                                    textAlign: TextAlign.center,
-                                  )));
-                      },
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4, childAspectRatio: 1 / 1),
-                    ))),
+                    margin: EdgeInsets.only(top: 10), child: itemsGrid())),
           ],
         )));
   }

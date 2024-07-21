@@ -109,6 +109,7 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
         child: Scaffold(
             appBar: CustomAppbar(
               title: '내 정보 변경',
+              leading: true,
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
