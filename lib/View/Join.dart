@@ -157,7 +157,7 @@ class _Join extends State<Join> {
                       child: mainInput(),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: DefaultComponents.achive25(), width: 3.0),
+                              color: DefaultComponents.achive50(), width: 3.0),
                           borderRadius: BorderRadius.circular(20)),
                     )),
                 SizedBox(
@@ -192,13 +192,13 @@ class _Join extends State<Join> {
                     child: Container(
                         padding: EdgeInsets.all(5),
                         margin: EdgeInsets.only(top: 15),
-                        width: 100, 
+                        width: 100,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                                color: DefaultComponents.achive25(),
+                                color: DefaultComponents.achive50(),
                                 width: 2.0),
-                            color: DefaultComponents.achive25()),
+                            color: DefaultComponents.achive50()),
                         child: Text(
                           '회원가입',
                           style: TextStyle(fontWeight: FontWeight.bold),

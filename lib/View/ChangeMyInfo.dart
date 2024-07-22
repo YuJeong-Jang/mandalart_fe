@@ -123,7 +123,7 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
                       child: mainInput(),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: DefaultComponents.achive25(), width: 3.0),
+                              color: DefaultComponents.achive50(), width: 3.0),
                           borderRadius: BorderRadius.circular(20)),
                     )),
                 SizedBox(
@@ -147,9 +147,9 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                                color: DefaultComponents.achive25(),
+                                color: DefaultComponents.achive50(),
                                 width: 2.0),
-                            color: DefaultComponents.achive25()),
+                            color: DefaultComponents.achive50()),
                         child: Text(
                           '변경',
                           style: TextStyle(fontWeight: FontWeight.bold),

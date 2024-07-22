@@ -32,13 +32,14 @@ class MyApp extends StatelessWidget {
           title: 'make me better',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-            scaffoldBackgroundColor: Colors.black,
+            scaffoldBackgroundColor: DefaultComponents.black(),
             fontFamily: 'Pretendard',
             useMaterial3: true,
           ),
-          home: ActionRegister(
-            modify: false,
-          )
+          home: MainPage()
+          // ActionRegister(
+          //   modify: false,
+          // )
           //     FlutterSplashScreen.fadeIn(
           //   backgroundColor: DefaultComponents.black(),
           //   onInit: () {

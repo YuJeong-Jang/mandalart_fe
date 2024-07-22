@@ -20,4 +20,5 @@ class DefaultComponents {
   static Color black({opacity = 1}) {
     return Color.fromRGBO(0, 0, 0, opacity);
   }
+
 }

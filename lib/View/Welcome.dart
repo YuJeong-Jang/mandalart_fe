@@ -17,7 +17,8 @@ class Welcome extends StatelessWidget {
           children: [
             Center(
                 child: Icon(
-              Icons.abc,
+              Icons.task_alt,
+              color: Colors.white,
               size: 200.0,
             )),
             SizedBox(
@@ -40,8 +41,8 @@ class Welcome extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                            color: DefaultComponents.achive25(), width: 2.0),
-                        color: DefaultComponents.achive25()))),
+                            color: DefaultComponents.achive50(), width: 2.0),
+                        color: DefaultComponents.achive50()))),
             InkWell(
                 onTap: () {
                   Navigator.push(context,
@@ -53,13 +54,14 @@ class Welcome extends StatelessWidget {
                     width: 200,
                     child: Text(
                       '로그인',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                          color: DefaultComponents.achive25(), width: 2.0),
+                          color: DefaultComponents.achive50(), width: 2.0),
                     )))
           ],
         ));

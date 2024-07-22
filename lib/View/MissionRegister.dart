@@ -102,7 +102,7 @@ class _MissionRegister extends State<MissionRegister> {
                                 width: 2.0)),
                         labelText: hintText,
                         labelStyle: TextStyle(
-                            color: DefaultComponents.achive25(), fontSize: 13)),
+                            color: DefaultComponents.achive50(), fontSize: 13)),
                     maxLines: 1,
                     focusNode: _focusNode,
                     controller: _controller,
@@ -164,7 +164,7 @@ class _MissionRegister extends State<MissionRegister> {
                       child: mainInput(),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: DefaultComponents.achive25(), width: 3.0),
+                              color: DefaultComponents.achive50(), width: 3.0),
                           borderRadius: BorderRadius.circular(20)),
                     )),
                 SizedBox(
@@ -182,7 +182,7 @@ class _MissionRegister extends State<MissionRegister> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                    color: DefaultComponents.achive25(),
+                                    color: DefaultComponents.achive50(),
                                     width: 2.0)),
                             child: Text(
                               '삭제하기',
@@ -205,9 +205,9 @@ class _MissionRegister extends State<MissionRegister> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                    color: DefaultComponents.achive25(),
+                                    color: DefaultComponents.achive50(),
                                     width: 2.0),
-                                color: DefaultComponents.achive25()),
+                                color: DefaultComponents.achive50()),
                             child: Text(
                               widget.modify ? '수정하기' : '저장하기',
                               style: TextStyle(fontWeight: FontWeight.bold),

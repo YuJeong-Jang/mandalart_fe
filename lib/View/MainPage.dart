@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
+import 'package:make_me_better_mandalart_fe/View/ActionRegister.dart';
 import 'package:make_me_better_mandalart_fe/View/MainDrawer.dart';
 import 'package:make_me_better_mandalart_fe/View/MissionRegister.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -92,16 +93,30 @@ class _MainPage extends State<MainPage> {
           child: mission == ''
               ? InkWell(
                   onTap: () async {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MissionRegister(modify: false)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MissionRegister(modify: false)));
                   },
-                  child: Icon(Icons.add))
-              : Center(
-                  child: Text(
-                  mission,
-                  style: TextStyle(fontSize: 12),
-                  textAlign: TextAlign.center,
-                )), //12글자까지 받기
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ))
+              : InkWell(
+                  onTap: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MissionRegister(modify: true)));
+                  },
+                  child: Center(
+                      child: Text(
+                    mission,
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    textAlign: TextAlign.center,
+                  ))), //12글자까지 받기
         );
       },
       separatorBuilder: (BuildContext context, int index) {
@@ -125,16 +140,30 @@ class _MainPage extends State<MainPage> {
             child: action == ''
                 ? InkWell(
                     onTap: () async {
-                      await MMBUtils.oneButtonAlert(
-                          context, " ", "api 만들면 인서트 작업 필요");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ActionRegister(modify: false)));
                     },
-                    child: Icon(Icons.add))
-                : Center(
-                    child: Text(
-                    action,
-                    style: TextStyle(fontSize: 12),
-                    textAlign: TextAlign.center,
-                  )));
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ))
+                : InkWell(
+                    onTap: () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ActionRegister(modify: true)));
+                    },
+                    child: Center(
+                        child: Text(
+                      action,
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                      textAlign: TextAlign.center,
+                    ))));
       },
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4, childAspectRatio: 1 / 1),
@@ -187,7 +216,7 @@ class _MainPage extends State<MainPage> {
               child: Text(
                 '전체 목표 기간 : $startDt ~ $endDt',
                 style: TextStyle(
-                    color: DefaultComponents.achive25(),
+                    color: DefaultComponents.achive50(),
                     fontSize: 15,
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,

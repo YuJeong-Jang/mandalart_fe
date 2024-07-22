@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
+import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 import 'package:make_me_better_mandalart_fe/View/ChangeMyInfo.dart';
 
 class MainDrawer extends StatefulWidget {
@@ -77,7 +78,10 @@ class _MainDrawer extends State<MainDrawer> {
                 fontSize: 14,
               ),
             ),
-            onTap: () {},
+            onTap: () async {
+              await MMBUtils.twoButtonAlert(
+                  context, "로그아웃", "로그아웃 하시겠습니까?", () {});
+            },
           ),
           Container(
             padding: EdgeInsets.symmetric(

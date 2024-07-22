@@ -70,13 +70,22 @@ class _ActionRegister extends State<ActionRegister> {
       itemBuilder: (context, index) {
         String rutine = MMBUtils.rutines[index];
         return Container(
-            margin: EdgeInsets.only(right: 8),
-            width: 49,
+            margin: EdgeInsets.only(right: 3, left: 3),
+            width: MediaQuery.of(context).size.width / 8,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                border: Border.all(color: Colors.green, width: 2.0)),
+              borderRadius: BorderRadius.circular(10),
+              border:
+                  Border.all(color: DefaultComponents.achive50(), width: 2.0),
+              color: mission != '' && mission == rutine
+                  ? DefaultComponents.achive50()
+                  : Colors.transparent,
+            ),
             child: InkWell(
-                onTap: () async {},
+                onTap: () async {
+                  setState(() {
+                    mission = rutine;
+                  });
+                },
                 child: Center(
                     child: Text(
                   rutine,
@@ -106,35 +115,46 @@ class _ActionRegister extends State<ActionRegister> {
                         child: rutineList()))
                 : type == 'mission'
                     ? Container(
-                        width: 150,
+                        width: 200,
                         child: DropdownButton(
                             items: dropDownList.keys
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (value) {},
-                            selectedItemBuilder: (context) {
-                              return dropDownList.values
-                                  .map<Widget>((String item) {
-                                return Container(
-                                  // alignment: Alignment.centerLeft,
-                                  // constraints:
-                                  //     const BoxConstraints(minWidth: 100),
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(
+                                  value: value,
+                                  child: Container(
+                                    width: 200,
+                                    padding: EdgeInsets.only(bottom: 5),
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                color: DefaultComponents
+                                                    .achive50(),
+                                                width: 2.0))),
+                                    child: Text(
+                                      value,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                );
-                              }).toList();
-                            },
+                                      ),
+                                    ),
+                                  ));
+                            }).toList(),
+                            borderRadius: BorderRadius.circular(10),
+                            hint: Text(
+                              '미션을 선택해주세요',
+                              style: TextStyle(
+                                  color: DefaultComponents.achive50()),
+                            ),
+                            alignment: AlignmentDirectional.center,
+                            disabledHint: Text(
+                              '미션선택은 필수입니다',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            onChanged: (value) {},
                             focusColor: Colors.white,
-                            style:
-                                TextStyle(color: DefaultComponents.achive50()),
+                            style: TextStyle(
+                              color: DefaultComponents.achive50(),
+                            ),
                             isExpanded: true,
                             underline: Container(
                               decoration: BoxDecoration(
@@ -144,7 +164,7 @@ class _ActionRegister extends State<ActionRegister> {
                                           width: 2.0))),
                             ),
                             iconEnabledColor: Colors.white,
-                            dropdownColor: Colors.black),
+                            dropdownColor: DefaultComponents.black()),
                       )
                     : TextFormField(
                         validator: (val) {
@@ -165,7 +185,7 @@ class _ActionRegister extends State<ActionRegister> {
                                     width: 2.0)),
                             labelText: hintText,
                             labelStyle: TextStyle(
-                                color: DefaultComponents.achive25(),
+                                color: DefaultComponents.achive50(),
                                 fontSize: 13)),
                         maxLines: 1,
                         focusNode: _focusNode,
@@ -253,7 +273,7 @@ class _ActionRegister extends State<ActionRegister> {
                       child: mainInput(),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: DefaultComponents.achive25(), width: 3.0),
+                              color: DefaultComponents.achive50(), width: 3.0),
                           borderRadius: BorderRadius.circular(20)),
                     )),
                 SizedBox(
@@ -283,7 +303,7 @@ class _ActionRegister extends State<ActionRegister> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                    color: DefaultComponents.achive25(),
+                                    color: DefaultComponents.achive50(),
                                     width: 2.0)),
                             child: Text(
                               '삭제하기',
@@ -313,9 +333,9 @@ class _ActionRegister extends State<ActionRegister> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                    color: DefaultComponents.achive25(),
+                                    color: DefaultComponents.achive50(),
                                     width: 2.0),
-                                color: DefaultComponents.achive25()),
+                                color: DefaultComponents.achive50()),
                             child: Text(
                               widget.modify ? '수정하기' : '저장하기',
                               style: TextStyle(fontWeight: FontWeight.bold),
