@@ -4,7 +4,8 @@ class MMBUtils {
   BuildContext context;
 
   MMBUtils(this.context);
-
+  static List rutines = ["일회성", "매일", "매주", "매월", "매년"];
+  
   static Future oneButtonAlert(
       BuildContext context, String title, String content) {
     return showDialog(

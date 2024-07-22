@@ -5,7 +5,7 @@ import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 import 'package:make_me_better_mandalart_fe/View/MainDrawer.dart';
-import 'package:make_me_better_mandalart_fe/View/Register.dart';
+import 'package:make_me_better_mandalart_fe/View/MissionRegister.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -93,7 +93,7 @@ class _MainPage extends State<MainPage> {
               ? InkWell(
                   onTap: () async {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Register()));
+                        MaterialPageRoute(builder: (context) => MissionRegister(modify: false)));
                   },
                   child: Icon(Icons.add))
               : Center(
@@ -110,7 +110,7 @@ class _MainPage extends State<MainPage> {
     );
   }
 
-  Widget itemsGrid() {
+  Widget actionsGrid() {
     return GridView.builder(
       itemCount: 16,
       itemBuilder: (context, index) {
@@ -213,7 +213,7 @@ class _MainPage extends State<MainPage> {
                     child: missionsList())),
             Expanded(
                 child: Container(
-                    margin: EdgeInsets.only(top: 10), child: itemsGrid())),
+                    margin: EdgeInsets.only(top: 10), child: actionsGrid())),
           ],
         )));
   }

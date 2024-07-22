@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/NavigationSwitcher.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
+import 'package:make_me_better_mandalart_fe/View/ActionRegister.dart';
 import 'package:make_me_better_mandalart_fe/View/ChangeMyInfo.dart';
 import 'package:make_me_better_mandalart_fe/View/Join.dart';
 import 'package:make_me_better_mandalart_fe/View/Login.dart';
 import 'package:make_me_better_mandalart_fe/View/MainPage.dart';
-import 'package:make_me_better_mandalart_fe/View/Register.dart';
+import 'package:make_me_better_mandalart_fe/View/MissionRegister.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -31,10 +32,13 @@ class MyApp extends StatelessWidget {
           title: 'make me better',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+            scaffoldBackgroundColor: Colors.black,
             fontFamily: 'Pretendard',
             useMaterial3: true,
           ),
-          home: Register()
+          home: ActionRegister(
+            modify: false,
+          )
           //     FlutterSplashScreen.fadeIn(
           //   backgroundColor: DefaultComponents.black(),
           //   onInit: () {
