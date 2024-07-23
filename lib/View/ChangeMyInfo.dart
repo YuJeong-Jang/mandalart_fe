@@ -137,7 +137,7 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
                       }
                       await MMBUtils.twoButtonAlert(
                           context, '변경하기', '변경하시겠습니까?', () {
-                        Navigator.of(context).pop();
+                      //  await AuthUtils.
                       });
                     },
                     child: Container(

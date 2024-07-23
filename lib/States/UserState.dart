@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:make_me_better_mandalart_fe/Models/Member.dart';
 
 class UserState with ChangeNotifier {
   int pk = 1;
@@ -9,6 +10,8 @@ class UserState with ChangeNotifier {
   String? token;
   String? password1;
   String? password2;
+  String loginToken = '';
+  Member? userInfo;
 
   changePk(int _val) {
     pk = _val;
@@ -47,6 +50,16 @@ class UserState with ChangeNotifier {
 
   changePassword2(String _val) {
     password2 = _val;
+    notifyListeners();
+  }
+
+  changeLoginToken(String _val) {
+    loginToken = _val;
+    notifyListeners();
+  }
+
+  changeUserInfo(Member _val) {
+    userInfo = _val;
     notifyListeners();
   }
 }

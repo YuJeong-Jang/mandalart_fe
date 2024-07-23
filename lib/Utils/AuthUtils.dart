@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/States/UserState.dart';
@@ -11,23 +13,21 @@ class AuthUtils {
 
   static String AUTH_URL = MMBUtils.BASE_URL + 'auth/';
 
-  static Future<String> login() async {
+  static Future<bool> login(context, Map loginInfo) async {
     try {
-      Map inputData = {
-        "username": "string",
-        "email": "user@example.com",
-        "password": "string"
-      };
+      var userState = Provider.of<UserState>(context, listen: false);
       Response response =
-          await Dio().post(AUTH_URL + '/login/', data: inputData);
+          await Dio().post(AUTH_URL + '/login/', data: loginInfo);
 
       if (response.statusCode == 200) {
-        return response.data["key"];
+        var key = response.data['key'];
+        await userState.changeLoginToken(key);
+        return true;
       } else {
-        return "NOTHING";
+        return false;
       }
     } catch (e) {
-      return "NOTHING";
+      return false;
     }
   }
 
@@ -100,13 +100,16 @@ class AuthUtils {
 
   static Future<bool> signup(context, signupInfo) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Response response =
           await Dio().post(AUTH_URL + '/signup/', data: signupInfo);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
+        var key = response.data['key'];
+        await userState.changeLoginToken(key);
         return true;
       } else {
-        if(response.statusCode == 400) {
+        if (response.statusCode == 400) {
           await MMBUtils.oneButtonAlert(context, "", "입력값을 확인하세요");
         }
         return false;
@@ -148,28 +151,42 @@ class AuthUtils {
     }
   }
 
-  static Future<String> getAuthUser() async {
+  static Future<bool> getAuthUser(context) async {
     try {
-      Response response = await Dio().get(AUTH_URL + '/user/');
+      var userState = Provider.of<UserState>(context, listen: false);
+      Response response = await Dio().get(AUTH_URL + '/user/',
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
-        return response.data;
+        var result = response.data;
+        await userState.changePk(result['pk']);
+        await userState.changeUsername(result['username']);
+        await userState.changeEmail(result['email']);
+        await userState.changeFirstName(result['first_name']);
+        await userState.changeLastName(result['last_name']);
+        await userState.changeUserInfo(result);
+        return true;
       } else {
-        return "NOTHING";
+        return false;
       }
     } catch (e) {
-      return "NOTHING";
+      return false;
     }
   }
 
-  static Future<String> putAuthUser() async {
+  static Future<String> putAuthUser(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {
         "username": "0wVE8@FPWa_z",
         "first_name": "string",
         "last_name": "string"
       };
-      Response response = await Dio().put(AUTH_URL + '/user/');
+      Response response = await Dio().put(AUTH_URL + '/user/',
+          data: inputData,
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;

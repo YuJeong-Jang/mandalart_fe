@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
+import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
+import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 import 'package:make_me_better_mandalart_fe/View/ChangeMyInfo.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -79,8 +83,16 @@ class _MainDrawer extends State<MainDrawer> {
               ),
             ),
             onTap: () async {
-              await MMBUtils.twoButtonAlert(
-                  context, "로그아웃", "로그아웃 하시겠습니까?", () {});
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              var navigationState =
+                  Provider.of<NavigationState>(context, listen: false);
+              await MMBUtils.twoButtonAlert(context, "로그아웃", "로그아웃 하시겠습니까?",
+                  () async {
+                await AuthUtils.logout();
+                await prefs.remove("@email");
+                await prefs.remove("@password");
+                await navigationState.changeState(NavigationStateEnum.auth);
+              });
             },
           ),
           Container(

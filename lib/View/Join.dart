@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
+import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
 import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 import 'package:make_me_better_mandalart_fe/View/Login.dart';
 import 'package:make_me_better_mandalart_fe/View/MainPage.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Join extends StatefulWidget {
   @override
@@ -179,6 +182,11 @@ class _Join extends State<Join> {
                     )),
                 InkWell(
                     onTap: () async {
+                      var navigationState =
+                          Provider.of<NavigationState>(context, listen: false);
+                      setState(() {
+                        showLoading = true;
+                      });
                       if (username == '' ||
                           email == '' ||
                           pwd == '' ||
@@ -196,17 +204,30 @@ class _Join extends State<Join> {
                         "password1": pwd,
                         "password2": pwdChk
                       };
-                      
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString('@username', username);
+                      await prefs.setString('@email', email);
+                      await prefs.setString('@password', pwd);
+
                       bool signupResult =
                           await AuthUtils.signup(context, signupInfo);
                       if (!signupResult) {
-                        await MMBUtils.oneButtonAlert(
+                        return await MMBUtils.oneButtonAlert(
                             context, "", "회원가입에 실패했습니다. 다시 시도해 주세요");
-                      } else {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MainPage()));
+                      }
+                      bool getAuthUserResult =
+                          await AuthUtils.getAuthUser(context);
+                      if (!getAuthUserResult) {
+                        return await MMBUtils.oneButtonAlert(
+                            context, "", "회원가입에 실패했습니다. 다시 시도해 주세요");
+                      }
+                      setState(() {
+                        showLoading = false;
+                      });
+                      navigationState.changeState(NavigationStateEnum.home);
+                      while (Navigator.of(context).canPop()) {
+                        Navigator.of(context).pop();
                       }
                     },
                     child: Container(

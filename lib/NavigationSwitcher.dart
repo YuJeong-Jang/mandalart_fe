@@ -1,8 +1,13 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
+import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
+import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 import 'package:make_me_better_mandalart_fe/View/Welcome.dart';
 import 'package:make_me_better_mandalart_fe/View/MainPage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationSwitcher extends StatefulWidget {
   @override
@@ -13,14 +18,29 @@ class _NavigationSwitcherState extends State<NavigationSwitcher> {
   @override
   void initState() {
     super.initState();
-    // _initState();
+    _initState();
   }
 
-  // void _initState() {
-  //   var state = Provider.of<NavigationState>(context, listen: false);
-  // state.changeState(NavigationStateEnum.auth);
-  //   state.changeState(NavigationStateEnum.home);
-  // }
+  Future<void> _initState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var state = Provider.of<NavigationState>(context, listen: false);
+    String? useremail = await prefs.getString('@email');
+    String? pwd = await prefs.getString('@password');
+    String? autoLogin = await prefs.getString('@autoLogin');
+
+    if (autoLogin != null || autoLogin != '') {
+      bool loginResult =
+          await AuthUtils.login(context, {'email': useremail, 'password': pwd});
+      if (!loginResult) {
+        return MMBUtils.oneButtonAlert(context, "", "로그인에 실패했습니다. 다시 시도해 주세요");
+      }
+      state.changeState(NavigationStateEnum.home);
+      return;
+    } else {
+      state.changeState(NavigationStateEnum.auth);
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
