@@ -1,11 +1,16 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class MMBUtils {
   BuildContext context;
 
   MMBUtils(this.context);
+
+  static String BASE_URL =
+      'http://ec2-3-38-162-31.ap-northeast-2.compute.amazonaws.com/';
+
   static List rutines = ["일회성", "매일", "매주", "매월", "매년"];
-  
+
   static Future oneButtonAlert(
       BuildContext context, String title, String content) {
     return showDialog(

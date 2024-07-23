@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
+import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 import 'package:make_me_better_mandalart_fe/View/Login.dart';
+import 'package:make_me_better_mandalart_fe/View/MainPage.dart';
 
 class Join extends StatefulWidget {
   @override
@@ -30,7 +32,7 @@ class _Join extends State<Join> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  String nickName = '';
+  String username = '';
   String email = '';
   String pwd = '';
   String pwdChk = '';
@@ -104,7 +106,7 @@ class _Join extends State<Join> {
             (val) {
           setState(
             () {
-              nickName = val;
+              username = val;
             },
           );
         }, "text"),
@@ -177,7 +179,7 @@ class _Join extends State<Join> {
                     )),
                 InkWell(
                     onTap: () async {
-                      if (nickName == '' ||
+                      if (username == '' ||
                           email == '' ||
                           pwd == '' ||
                           pwdChk == '') {
@@ -187,6 +189,24 @@ class _Join extends State<Join> {
                       if (pwd != pwdChk) {
                         return await MMBUtils.oneButtonAlert(
                             context, "", "비밀번호를 확인하세요");
+                      }
+                      Map signupInfo = {
+                        "username": username,
+                        "email": email,
+                        "password1": pwd,
+                        "password2": pwdChk
+                      };
+                      
+                      bool signupResult =
+                          await AuthUtils.signup(context, signupInfo);
+                      if (!signupResult) {
+                        await MMBUtils.oneButtonAlert(
+                            context, "", "회원가입에 실패했습니다. 다시 시도해 주세요");
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainPage()));
                       }
                     },
                     child: Container(

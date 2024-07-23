@@ -2,7 +2,11 @@ import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/NavigationSwitcher.dart';
+import 'package:make_me_better_mandalart_fe/States/ActionState.dart';
+import 'package:make_me_better_mandalart_fe/States/BoardState.dart';
+import 'package:make_me_better_mandalart_fe/States/MissionState.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
+import 'package:make_me_better_mandalart_fe/States/UserState.dart';
 import 'package:make_me_better_mandalart_fe/View/ActionRegister.dart';
 import 'package:make_me_better_mandalart_fe/View/ChangeMyInfo.dart';
 import 'package:make_me_better_mandalart_fe/View/Join.dart';
@@ -25,6 +29,18 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<NavigationState>(
           create: (context) => NavigationState(),
+        ),
+        ChangeNotifierProvider<ActionState>(
+          create: (context) => ActionState(),
+        ),
+        ChangeNotifierProvider<BoardState>(
+          create: (context) => BoardState(),
+        ),
+        ChangeNotifierProvider<MissionState>(
+          create: (context) => MissionState(),
+        ),
+        ChangeNotifierProvider<UserState>(
+          create: (context) => UserState(),
         )
       ],
       child: MaterialApp(
