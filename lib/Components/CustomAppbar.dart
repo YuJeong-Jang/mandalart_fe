@@ -1,5 +1,9 @@
 import "package:flutter/material.dart";
 import "package:make_me_better_mandalart_fe/Components/DefaultComponents.dart";
+import "package:make_me_better_mandalart_fe/States/BoardState.dart";
+import "package:make_me_better_mandalart_fe/States/UserState.dart";
+import "package:make_me_better_mandalart_fe/View/BoardRegister.dart";
+import "package:provider/provider.dart";
 
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -9,12 +13,30 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userState = Provider.of<UserState>(context, listen: false);
     return new AppBar(
       title: InkWell(
         onTap: () {
-          while (Navigator.canPop(context)) {
-            Navigator.pop(context);
-          }
+          if (userState.boardList.length == 0) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BoardRegister(
+                          modify: false,
+                        )));
+          } else if (userState.boardList.length > 0) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BoardRegister(
+                          modify: true,
+                        )));
+          } 
+          // else {
+          //   while (Navigator.canPop(context)) {
+          //     Navigator.pop(context);
+          //   }
+          // }
         },
         child: Text(
           title,

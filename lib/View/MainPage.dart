@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
-import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
+import 'package:make_me_better_mandalart_fe/States/ActionState.dart';
+import 'package:make_me_better_mandalart_fe/States/BoardState.dart';
+import 'package:make_me_better_mandalart_fe/States/MissionState.dart';
+import 'package:make_me_better_mandalart_fe/Utils/CheckerUtils.dart';
 import 'package:make_me_better_mandalart_fe/View/ActionRegister.dart';
 import 'package:make_me_better_mandalart_fe/View/MainDrawer.dart';
 import 'package:make_me_better_mandalart_fe/View/MissionRegister.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -18,7 +21,6 @@ class MainPage extends StatefulWidget {
 class _MainPage extends State<MainPage> {
   late GlobalKey<ScaffoldState> _drawerKey;
 
-  String nickName = '나의 닉네임';
   double todayRate = 78.4;
   double totalRate = 25.7;
   double? todayPercent;
@@ -27,27 +29,44 @@ class _MainPage extends State<MainPage> {
   String startDt = DateFormat('yyyy-MM-dd').format(DateTime(2024, 1, 1));
   String endDt = DateFormat('yyyy-MM-dd').format(DateTime(2024, 12, 31));
   List actions = [];
-  List<Map> missions = [
-    {
-      "엄태구": ["하루에 1000원씩 저금", "경제 뉴스레터 읽어보기", "아이템 달성하기"]
-    },
-    {
-      "세븐틴": ["태구야아 태구야아아아", "앓다죽겠네"]
-    },
-    {
-      "덴마크": ["아하하하하하하", "미챠분다 설레서", "나의사랑 너의사랑", "슬슬배고픈데"]
-    }
+  List boards = [];
+  List missions = [
+    // {
+    //   "엄태구": ["하루에 1000원씩 저금", "경제 뉴스레터 읽어보기", "아이템 달성하기"]
+    // },
+    // {
+    //   "세븐틴": ["태구야아 태구야아아아", "앓다죽겠네"]
+    // },
+    // {
+    //   "덴마크": ["아하하하하하하", "미챠분다 설레서", "나의사랑 너의사랑", "슬슬배고픈데"]
+    // }
   ];
 
   @override
   void initState() {
     super.initState();
     _drawerKey = GlobalKey();
+    // setState(() {
+    //   todayPercent = todayRate / 100;
+    //   totalPercent = totalRate / 100;
+    // });
+    initBoard();
+    checkLength();
+  }
+
+  initBoard() async {
+    List boardsResult = await CheckerUtils.getBoards(context);
+    List missionsResult = await CheckerUtils.getMissions(context);
+    List actionsResult = await CheckerUtils.getActions(context);
     setState(() {
+      boards = boardsResult;
+      missions = missionsResult;
+      actions = actionsResult;
+      todayRate = boards[0]['daily_goal'];
+      totalRate = boards[0]['total_percentage'];
       todayPercent = todayRate / 100;
       totalPercent = totalRate / 100;
     });
-    checkLength();
   }
 
   checkLength() {
@@ -172,9 +191,12 @@ class _MainPage extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    var boardState = Provider.of<BoardState>(context, listen: false);
+    var missionState = Provider.of<MissionState>(context, listen: false);
+    var actionState = Provider.of<ActionState>(context, listen: false);
     return Scaffold(
         appBar: CustomAppbar(
-          title: nickName,
+          title: boardState.title,
           leading: false,
         ),
         key: _drawerKey,

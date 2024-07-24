@@ -9,7 +9,7 @@ class Welcome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppbar(
-          title: 'welcome to "make me better"!',
+          title: '만다라트로 계획을 세워보세요',
           leading: false,
         ),
         body: Column(

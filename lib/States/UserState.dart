@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:make_me_better_mandalart_fe/Models/Board.dart';
 import 'package:make_me_better_mandalart_fe/Models/Member.dart';
 
 class UserState with ChangeNotifier {
@@ -12,6 +13,7 @@ class UserState with ChangeNotifier {
   String? password2;
   String loginToken = '';
   Member? userInfo;
+  List<Board> boardList = [];
 
   changePk(int _val) {
     pk = _val;
@@ -60,6 +62,11 @@ class UserState with ChangeNotifier {
 
   changeUserInfo(Member _val) {
     userInfo = _val;
+    notifyListeners();
+  }
+
+  changeBoardList(List<Board> _val) {
+    boardList = _val;
     notifyListeners();
   }
 }

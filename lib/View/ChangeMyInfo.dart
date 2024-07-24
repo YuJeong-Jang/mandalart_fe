@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
+import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 
 class ChangeMyInfo extends StatefulWidget {
@@ -135,10 +136,15 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
                         return await MMBUtils.oneButtonAlert(
                             context, "", "필수 입력을 확인하세요");
                       }
+                      Map changeInfo = {
+                        "new_password1": pwd,
+                        "new_password2": nickName
+                      };
                       await MMBUtils.twoButtonAlert(
-                          context, '변경하기', '변경하시겠습니까?', () {
-                      //  await AuthUtils.
+                          context, '변경하기', '변경하시겠습니까?', () async {
+                        await AuthUtils.passwordChange(context, changeInfo);
                       });
+                      // 비번 변경후 어떻게 할건지?
                     },
                     child: Container(
                         padding: EdgeInsets.all(5),

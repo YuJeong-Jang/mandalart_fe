@@ -88,7 +88,7 @@ class _MainDrawer extends State<MainDrawer> {
                   Provider.of<NavigationState>(context, listen: false);
               await MMBUtils.twoButtonAlert(context, "로그아웃", "로그아웃 하시겠습니까?",
                   () async {
-                await AuthUtils.logout();
+                await AuthUtils.logout(context);
                 await prefs.remove("@email");
                 await prefs.remove("@password");
                 await navigationState.changeState(NavigationStateEnum.auth);

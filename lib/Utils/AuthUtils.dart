@@ -31,8 +31,9 @@ class AuthUtils {
     }
   }
 
-  static Future<String> logout() async {
+  static Future<String> logout(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Response response = await Dio().post(AUTH_URL + '/logout/');
 
       if (response.statusCode == 200) {
@@ -45,24 +46,25 @@ class AuthUtils {
     }
   }
 
-  static Future<String> passwordChange() async {
+  static Future<void> passwordChange(context, Map changeInfo) async {
     try {
-      Map inputData = {"new_password1": "string", "new_password2": "string"};
-      Response response =
-          await Dio().post(AUTH_URL + '/password/change/', data: inputData);
+      var userState = Provider.of<UserState>(context, listen: false);
+      Response response = await Dio().post(AUTH_URL + '/password/change/',
+          data: changeInfo,
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
-        return response.data["detail"];
+        // 비번변경이면 로그아웃 시킬건지?
       } else {
-        return "NOTHING";
       }
     } catch (e) {
-      return "NOTHING";
     }
   }
 
-  static Future<String> passwordReset() async {
+  static Future<String> passwordReset(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {"email": "user@example.com"};
       Response response =
           await Dio().post(AUTH_URL + '/password/reset/', data: inputData);
@@ -77,8 +79,9 @@ class AuthUtils {
     }
   }
 
-  static Future<String> passwordResetConfirm() async {
+  static Future<String> passwordResetConfirm(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {
         "new_password1": "string",
         "new_password2": "string",
@@ -119,8 +122,9 @@ class AuthUtils {
     }
   }
 
-  static Future<String> signupResendEmail() async {
+  static Future<String> signupResendEmail(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {"email": "user@example.com"};
       Response response =
           await Dio().post(AUTH_URL + '/signup/resend-email/', data: inputData);
@@ -135,8 +139,9 @@ class AuthUtils {
     }
   }
 
-  static Future<String> signupverifyEmail() async {
+  static Future<String> signupverifyEmail(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {"key": "string"};
       Response response =
           await Dio().post(AUTH_URL + '/signup/verify-email/', data: inputData);
@@ -198,14 +203,17 @@ class AuthUtils {
     }
   }
 
-  static Future<String> patchAuthUser() async {
+  static Future<String> patchAuthUser(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {
         "username": "NGjTCN98",
         "first_name": "string",
         "last_name": "string"
       };
-      Response response = await Dio().patch(AUTH_URL + '/user/');
+      Response response = await Dio().patch(AUTH_URL + '/user/',
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;

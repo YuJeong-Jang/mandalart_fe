@@ -5,7 +5,6 @@ import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
 import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 import 'package:make_me_better_mandalart_fe/View/Login.dart';
-import 'package:make_me_better_mandalart_fe/View/MainPage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -77,6 +76,7 @@ class _Join extends State<Join> {
               onSaved: (newValue) {
                 changeState(newValue);
               },
+              style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(

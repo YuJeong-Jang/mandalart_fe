@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:make_me_better_mandalart_fe/Models/Board.dart';
+import 'package:make_me_better_mandalart_fe/Models/Mission.dart';
+import 'package:make_me_better_mandalart_fe/States/UserState.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
+import 'package:provider/provider.dart';
 
 class CheckerUtils {
   BuildContext context;
@@ -9,22 +13,26 @@ class CheckerUtils {
 
   static String CHECKER_URL = MMBUtils.BASE_URL + 'checker/';
 
-  static Future<String> getActions() async {
+  static Future<List<Action>> getActions(context) async {
     try {
-      Response response = await Dio().get(CHECKER_URL + '/actions/');
+      var userState = Provider.of<UserState>(context, listen: false);
+      Response response = await Dio().get(CHECKER_URL + '/actions/',
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
       } else {
-        return "NOTHING";
+        return [];
       }
     } catch (e) {
-      return "NOTHING";
+      return [];
     }
   }
 
-  static Future<String> postActions() async {
+  static Future<String> postActions(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {
         "title": "string",
         "mission_id": 0,
@@ -34,8 +42,10 @@ class CheckerUtils {
         "unit_name": "string",
         "achievement": BigInt.parse('9223372036854776000')
       };
-      Response response =
-          await Dio().post(CHECKER_URL + '/actions/', data: inputData);
+      Response response = await Dio().post(CHECKER_URL + '/actions/',
+          data: inputData,
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 201) {
         return response.data;
@@ -47,9 +57,12 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> getActionsAsId(int id) async {
+  static Future<String> getActionsAsId(context, int id) async {
     try {
-      Response response = await Dio().get(CHECKER_URL + '/actions/${"userId"}/');
+      var userState = Provider.of<UserState>(context, listen: false);
+      Response response = await Dio().get(CHECKER_URL + '/actions/${"userId"}/',
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -61,8 +74,9 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> putActionsAsId(int id) async {
+  static Future<String> putActionsAsId(context, int id) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {
         "title": "string",
         "mission_id": 0,
@@ -72,8 +86,10 @@ class CheckerUtils {
         "unit_name": "string",
         "achievement": BigInt.parse('9223372036854776000')
       };
-      Response response = await Dio()
-          .put(CHECKER_URL + '/actions/${"userId"}/', data: inputData);
+      Response response = await Dio().put(CHECKER_URL + '/actions/${"userId"}/',
+          data: inputData,
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -85,8 +101,9 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> patchActionsAsId(int id) async {
+  static Future<String> patchActionsAsId(context, int id) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {
         "title": "string",
         "mission_id": 0,
@@ -96,8 +113,11 @@ class CheckerUtils {
         "unit_name": "string",
         "achievement": BigInt.parse('9223372036854776000')
       };
-      Response response = await Dio()
-          .patch(CHECKER_URL + '/actions/${"userId"}/', data: inputData);
+      Response response = await Dio().patch(
+          CHECKER_URL + '/actions/${"userId"}/',
+          data: inputData,
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -109,10 +129,13 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> deleteActionsAsId(int id) async {
+  static Future<String> deleteActionsAsId(context, int id) async {
     try {
-      Response response =
-          await Dio().delete(CHECKER_URL + '/actions/${"userId"}/');
+      var userState = Provider.of<UserState>(context, listen: false);
+      Response response = await Dio().delete(
+          CHECKER_URL + '/actions/${"userId"}/',
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 204) {
         return response.data;
@@ -124,22 +147,26 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> getBoards() async {
+  static Future<List<Board>> getBoards(context) async {
     try {
-      Response response = await Dio().get(CHECKER_URL + '/baords/');
+      var userState = Provider.of<UserState>(context, listen: false);
+      Response response = await Dio().get(CHECKER_URL + '/baords/',
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
       } else {
-        return "NOTHING";
+        return [];
       }
     } catch (e) {
-      return "NOTHING";
+      return [];
     }
   }
 
-  static Future<String> postBoards() async {
+  static Future<String> postBoards(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {
         "deleted": "2024-07-23T07:23:50.064Z",
         "title": "string",
@@ -147,8 +174,10 @@ class CheckerUtils {
         "start_at": "2024-07-23",
         "end_at": "2024-07-23"
       };
-      Response response =
-          await Dio().post(CHECKER_URL + '/baords/', data: inputData);
+      Response response = await Dio().post(CHECKER_URL + '/baords/',
+          data: inputData,
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 201) {
         return response.data;
@@ -160,9 +189,12 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> getBoardsAsId() async {
+  static Future<String> getBoardsAsId(context) async {
     try {
-      Response response = await Dio().get(CHECKER_URL + '/baords/${'userId'}/');
+      var userState = Provider.of<UserState>(context, listen: false);
+      Response response = await Dio().get(CHECKER_URL + '/baords/${'userId'}/',
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -174,8 +206,9 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> putBoardsAsId() async {
+  static Future<String> putBoardsAsId(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {
         "deleted": "2024-07-23T07:23:50.064Z",
         "title": "string",
@@ -183,8 +216,10 @@ class CheckerUtils {
         "start_at": "2024-07-23",
         "end_at": "2024-07-23"
       };
-      Response response =
-          await Dio().put(CHECKER_URL + '/baords/${'userId'}/', data: inputData);
+      Response response = await Dio().put(CHECKER_URL + '/baords/${'userId'}/',
+          data: inputData,
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -196,8 +231,9 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> patchBoardsAsId() async {
+  static Future<String> patchBoardsAsId(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {
         "deleted": "2024-07-23T07:25:46.255Z",
         "title": "string",
@@ -205,8 +241,11 @@ class CheckerUtils {
         "start_at": "2024-07-23",
         "end_at": "2024-07-23"
       };
-      Response response = await Dio()
-          .patch(CHECKER_URL + '/baords/${'userId'}/', data: inputData);
+      Response response = await Dio().patch(
+          CHECKER_URL + '/baords/${'userId'}/',
+          data: inputData,
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -218,10 +257,13 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> deleteBoardsAsId() async {
+  static Future<String> deleteBoardsAsId(context) async {
     try {
-      Response response =
-          await Dio().delete(CHECKER_URL + '/baords/${'userId'}/');
+      var userState = Provider.of<UserState>(context, listen: false);
+      Response response = await Dio().delete(
+          CHECKER_URL + '/baords/${'userId'}/',
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 204) {
         return response.data;
@@ -233,25 +275,31 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> getMissions() async {
+  static Future<List<Mission>> getMissions(context) async {
     try {
-      Response response = await Dio().get(CHECKER_URL + '/missions/');
+      var userState = Provider.of<UserState>(context, listen: false);
+      Response response = await Dio().get(CHECKER_URL + '/missions/',
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
       } else {
-        return "NOTHING";
+        return [];
       }
     } catch (e) {
-      return "NOTHING";
+      return [];
     }
   }
 
-  static Future<String> postMissions() async {
+  static Future<String> postMissions(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {"title": "string", "board_id": 0};
-      Response response =
-          await Dio().post(CHECKER_URL + '/missions/', data: inputData);
+      Response response = await Dio().post(CHECKER_URL + '/missions/',
+          data: inputData,
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 201) {
         return response.data;
@@ -263,10 +311,13 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> getMissionsAsId() async {
+  static Future<String> getMissionsAsId(context) async {
     try {
-      Response response =
-          await Dio().get(CHECKER_URL + '/missions/${'userId'}/');
+      var userState = Provider.of<UserState>(context, listen: false);
+      Response response = await Dio().get(
+          CHECKER_URL + '/missions/${'userId'}/',
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -278,8 +329,9 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> putMissionsAsId() async {
+  static Future<String> putMissionsAsId(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {
         "deleted": "2024-07-23T07:25:46.255Z",
         "title": "string",
@@ -287,8 +339,11 @@ class CheckerUtils {
         "start_at": "2024-07-23",
         "end_at": "2024-07-23"
       };
-      Response response = await Dio()
-          .put(CHECKER_URL + '/missions/${'userId'}/', data: inputData);
+      Response response = await Dio().put(
+          CHECKER_URL + '/missions/${'userId'}/',
+          data: inputData,
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -300,8 +355,9 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> patchMissionsAsId() async {
+  static Future<String> patchMissionsAsId(context) async {
     try {
+      var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {
         "deleted": "2024-07-23T07:25:46.255Z",
         "title": "string",
@@ -309,8 +365,11 @@ class CheckerUtils {
         "start_at": "2024-07-23",
         "end_at": "2024-07-23"
       };
-      Response response = await Dio()
-          .patch(CHECKER_URL + '/missions/${'userId'}/', data: inputData);
+      Response response = await Dio().patch(
+          CHECKER_URL + '/missions/${'userId'}/',
+          data: inputData,
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -322,10 +381,13 @@ class CheckerUtils {
     }
   }
 
-  static Future<String> deleteMissionsAsId() async {
+  static Future<String> deleteMissionsAsId(context) async {
     try {
-      Response response =
-          await Dio().patch(CHECKER_URL + '/missions/${'userId'}/');
+      var userState = Provider.of<UserState>(context, listen: false);
+      Response response = await Dio().patch(
+          CHECKER_URL + '/missions/${'userId'}/',
+          options: Options(
+              headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 204) {
         return response.data;
