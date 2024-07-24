@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
 import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
@@ -28,24 +26,26 @@ class _NavigationSwitcherState extends State<NavigationSwitcher> {
     String? pwd = await prefs.getString('@password');
     String? autoLogin = await prefs.getString('@autoLogin');
 
-    if (autoLogin != null || autoLogin != '') {
+    if (autoLogin != null &&
+        autoLogin != '' &&
+        useremail != '' &&
+        useremail != null &&
+        pwd != null &&
+        pwd != '') {
       bool loginResult =
           await AuthUtils.login(context, {'email': useremail, 'password': pwd});
       if (!loginResult) {
         return MMBUtils.oneButtonAlert(context, "", "로그인에 실패했습니다. 다시 시도해 주세요");
       }
       state.changeState(NavigationStateEnum.home);
-      return;
     } else {
       state.changeState(NavigationStateEnum.auth);
-      return;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var state = Provider.of<NavigationState>(context, listen: false);
-    state.changeState(NavigationStateEnum.auth);
+    var state = Provider.of<NavigationState>(context, listen: true);
     switchNavigation() {
       switch (state.state) {
         case NavigationStateEnum.none:

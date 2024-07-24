@@ -8,30 +8,29 @@ import "package:provider/provider.dart";
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool? leading;
+  final bool? preventOnTap;
 
-  CustomAppbar({super.key, required this.title, this.leading});
+  CustomAppbar(
+      {super.key, required this.title, this.leading, this.preventOnTap});
 
   @override
   Widget build(BuildContext context) {
     var userState = Provider.of<UserState>(context, listen: false);
+    bool registBoard = userState.boardList.length > 0;
     return new AppBar(
       title: InkWell(
         onTap: () {
-          if (userState.boardList.length == 0) {
+          if (preventOnTap!) {
+            return;
+          } else {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => BoardRegister(
-                          modify: false,
+                          modify: registBoard,
                         )));
-          } else if (userState.boardList.length > 0) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BoardRegister(
-                          modify: true,
-                        )));
-          } 
+          }
+          // }
           // else {
           //   while (Navigator.canPop(context)) {
           //     Navigator.pop(context);

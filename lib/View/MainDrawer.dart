@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
+import 'package:make_me_better_mandalart_fe/States/UserState.dart';
 import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 import 'package:make_me_better_mandalart_fe/View/ChangeMyInfo.dart';
@@ -13,9 +14,22 @@ class MainDrawer extends StatefulWidget {
 }
 
 class _MainDrawer extends State<MainDrawer> {
-  String nickName = '엄태구 짝사랑';
+  @override
+  void initState() {
+    super.initState();
+    _dismissKeyboard();
+  }
+
+  void _dismissKeyboard() {
+    try {
+      // 인풋 포커스 해제
+      FocusScope.of(context).unfocus();
+    } catch (err) {}
+  }
+
   @override
   Widget build(BuildContext context) {
+    var userState = Provider.of<UserState>(context, listen: false);
     return Drawer(
       width: 250,
       child: SafeArea(
@@ -31,7 +45,7 @@ class _MainDrawer extends State<MainDrawer> {
                 ),
               ),
               TextSpan(
-                text: nickName,
+                text: userState.username,
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -89,8 +103,10 @@ class _MainDrawer extends State<MainDrawer> {
               await MMBUtils.twoButtonAlert(context, "로그아웃", "로그아웃 하시겠습니까?",
                   () async {
                 await AuthUtils.logout(context);
+                await prefs.remove("@username");
                 await prefs.remove("@email");
                 await prefs.remove("@password");
+                Navigator.of(context).pop();
                 await navigationState.changeState(NavigationStateEnum.auth);
               });
             },

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
@@ -31,6 +32,12 @@ class _Login extends State<Login> {
   @override
   void initState() {
     super.initState();
+    if (kDebugMode) {
+      setState(() {
+        email = 'vbnm@llll.com';
+        pwd = 'lovely91!';
+      });
+    }
     _dismissKeyboard();
   }
 
@@ -39,6 +46,20 @@ class _Login extends State<Login> {
       // 인풋 포커스 해제
       FocusScope.of(context).unfocus();
     } catch (err) {}
+  }
+
+  checkError(_controller, type) {
+    if (_controller.text.isEmpty) {
+      return '최소 한 글자 이상 입력하세요';
+    } else if (type == 'email' &&
+        (!_controller.text.contains('@') || !_controller.text.contains('.'))) {
+      return '이메일 형식을 확인하세요';
+    } else if (type == 'pwd' && !_controller.text.contains(RegExp(r'[0-9]'))) {
+      return '숫자를 포함해야 합니다';
+    } else if (type == 'pwd' &&
+        !_controller.text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return '특수문자를 포함해야 합니다';
+    }
   }
 
   Widget inputRow(String hintText, FocusNode _focusNode,
@@ -51,36 +72,39 @@ class _Login extends State<Login> {
             child: TextFormField(
               obscureText: type == 'pwd' ? true : false,
               validator: (val) {
-                if (val!.length == 0) {
-                  return '최소 한 글자 이상 입력해주세요';
-                }
-                if (type == 'email' &&
-                    (!val.contains('@') || !val.contains('.'))) {
-                  return '이메일 형식을 확인하세요';
-                }
-                return null;
+                // if (val!.length == 0) {
+                //   return '최소 한 글자 이상 입력해주세요';
+                // }
+                // if (type == 'email' &&
+                //     (!val.contains('@') || !val.contains('.'))) {
+                //   return '이메일 형식을 확인하세요';
+                // }
+                return;
+                // null;
               },
-              onSaved: (newValue) {
-                changeState(newValue);
-              },
+              // onSaved: (newValue) {
+              //   changeState(newValue);
+              // },
+              style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: DefaultComponents.achive50(), width: 2.0)),
                   labelText: hintText,
                   labelStyle: TextStyle(
-                      color: DefaultComponents.achive50(), fontSize: 13)),
+                      color: DefaultComponents.achive50(), fontSize: 13),
+                  errorText: checkError(_controller, type)),
               maxLines: 1,
               focusNode: _focusNode,
               controller: _controller,
               keyboardType: TextInputType.text,
               onChanged: (value) {
-                if (formKey.currentState!.validate()) {
-                  return;
-                } else {
-                  formKey.currentState!.save();
-                  changeState(value);
-                }
+                // if (formKey.currentState!.validate()) {
+                //   return;
+                // } else {
+                //   formKey.currentState!.save();
+                changeState(value);
+                // }
               },
             ))
       ],
@@ -117,6 +141,7 @@ class _Login extends State<Login> {
             appBar: CustomAppbar(
               title: '로그인',
               leading: true,
+              preventOnTap: true,
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -166,7 +191,7 @@ class _Login extends State<Login> {
                             context, "", "로그인에 실패했습니다. 다시 시도해 주세요");
                       }
                       navigationState.changeState(NavigationStateEnum.home);
-                      while (Navigator.of(context).canPop()) {
+                      if (Navigator.of(context).canPop()) {
                         Navigator.of(context).pop();
                       }
                     },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
+import 'package:make_me_better_mandalart_fe/Utils/CheckerUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 
 class MissionRegister extends StatefulWidget {
@@ -42,6 +43,12 @@ class _MissionRegister extends State<MissionRegister> {
       // 인풋 포커스 해제
       FocusScope.of(context).unfocus();
     } catch (err) {}
+  }
+
+  checkError(_controller, type) {
+    if (_controller.text.isEmpty) {
+      return '최소 한 글자 이상 입력하세요';
+    }
   }
 
   Widget rutineList() {
@@ -87,14 +94,15 @@ class _MissionRegister extends State<MissionRegister> {
                         child: rutineList()))
                 : TextFormField(
                     validator: (val) {
-                      if (val!.length == 0) {
-                        return '최소 한 글자 이상 입력해주세요';
-                      }
-                      return null;
+                      // if (val!.length == 0) {
+                      //   return '최소 한 글자 이상 입력해주세요';
+                      // }
+                      return;
+                      // null;
                     },
-                    onSaved: (newValue) {
-                      changeState(newValue);
-                    },
+                    // onSaved: (newValue) {
+                    //   changeState(newValue);
+                    // },
                     decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
@@ -102,18 +110,19 @@ class _MissionRegister extends State<MissionRegister> {
                                 width: 2.0)),
                         labelText: hintText,
                         labelStyle: TextStyle(
-                            color: DefaultComponents.achive50(), fontSize: 13)),
+                            color: DefaultComponents.achive50(), fontSize: 13),
+                        errorText: checkError(_controller, type)),
                     maxLines: 1,
                     focusNode: _focusNode,
                     controller: _controller,
                     keyboardType: TextInputType.text,
                     onChanged: (value) {
-                      if (formKey.currentState!.validate()) {
-                        return;
-                      } else {
-                        formKey.currentState!.save();
-                        changeState(value);
-                      }
+                      // if (formKey.currentState!.validate()) {
+                      //   return;
+                      // } else {
+                      //   formKey.currentState!.save();
+                      changeState(value);
+                      // }
                     },
                   ))
       ],
@@ -174,7 +183,20 @@ class _MissionRegister extends State<MissionRegister> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
-                        onTap: () async {},
+                        onTap: () async {
+                          if (!widget.modify) {
+                            Navigator.pop(context);
+                          } else {
+                            await MMBUtils.twoButtonAlert(
+                                context, '삭제하기', '정말 삭제하시겠습니까?', () async {
+                              // 미션 아이디 바꿔야함
+                              // await CheckerUtils.deleteMissionsAsId(context, 0);
+                              while (Navigator.canPop(context)) {
+                                Navigator.pop(context);
+                              }
+                            });
+                          }
+                        },
                         child: Container(
                             padding: EdgeInsets.all(5),
                             margin: EdgeInsets.only(top: 15),
@@ -185,7 +207,7 @@ class _MissionRegister extends State<MissionRegister> {
                                     color: DefaultComponents.achive50(),
                                     width: 2.0)),
                             child: Text(
-                              '삭제하기',
+                              widget.modify ? '삭제하기' : '뒤로가기',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),

@@ -54,6 +54,22 @@ class _Join extends State<Join> {
     } catch (err) {}
   }
 
+  checkError(_controller, type) {
+    if (_controller.text.isEmpty) {
+      return '최소 한 글자 이상 입력하세요';
+    } else if (type == 'email' &&
+        (!_controller.text.contains('@') || !_controller.text.contains('.'))) {
+      return '이메일 형식을 확인하세요';
+    } else if (type == 'pwd' && !_controller.text.contains(RegExp(r'[0-9]'))) {
+      return '숫자를 포함해야 합니다';
+    } else if (type == 'pwd' &&
+        !_controller.text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return '특수문자를 포함해야 합니다';
+    } else if (type == 'pwd' && pwd != pwdChk) {
+      return '비밀번호가 일치하지 않습니다';
+    }
+  }
+
   Widget inputRow(String hintText, FocusNode _focusNode,
       TextEditingController _controller, Function changeState, String type) {
     return Container(
@@ -64,18 +80,18 @@ class _Join extends State<Join> {
             child: TextFormField(
               obscureText: type == 'pwd' ? true : false,
               validator: (val) {
-                if (val!.length == 0) {
-                  return '최소 한 글자 이상 입력해주세요';
-                }
-                if (type == 'email' &&
-                    (!val.contains('@') || !val.contains('.'))) {
-                  return '이메일 형식을 확인하세요';
-                }
-                return null;
+                // if (val!.length == 0) {
+                //   return '최소 한 글자 이상 입력해주세요';
+                // }
+                // if (type == 'email' &&
+                //     (!val.contains('@') || !val.contains('.'))) {
+                //   return '이메일 형식을 확인하세요';
+                // }
+                return;
               },
-              onSaved: (newValue) {
-                changeState(newValue);
-              },
+              // onSaved: (newValue) {
+              //   changeState(newValue);
+              // },
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
@@ -83,18 +99,19 @@ class _Join extends State<Join> {
                           color: DefaultComponents.achive50(), width: 2.0)),
                   labelText: hintText,
                   labelStyle: TextStyle(
-                      color: DefaultComponents.achive50(), fontSize: 13)),
+                      color: DefaultComponents.achive50(), fontSize: 13),
+                  errorText: checkError(_controller, type)),
               maxLines: 1,
               focusNode: _focusNode,
               controller: _controller,
               keyboardType: TextInputType.text,
               onChanged: (value) {
-                if (formKey.currentState!.validate()) {
-                  return;
-                } else {
-                  formKey.currentState!.save();
-                  changeState(value);
-                }
+                // if (formKey.currentState!.validate()) {
+                //   return;
+                // } else {
+                //   formKey.currentState!.save();
+                changeState(value);
+                // }
               },
             ))
       ],
@@ -149,6 +166,7 @@ class _Join extends State<Join> {
             appBar: CustomAppbar(
               title: '회원가입',
               leading: true,
+              preventOnTap: true,
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -226,7 +244,7 @@ class _Join extends State<Join> {
                         showLoading = false;
                       });
                       navigationState.changeState(NavigationStateEnum.home);
-                      while (Navigator.of(context).canPop()) {
+                      if (Navigator.of(context).canPop()) {
                         Navigator.of(context).pop();
                       }
                     },

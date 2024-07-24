@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
+import 'package:make_me_better_mandalart_fe/States/UserState.dart';
 import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
+import 'package:provider/provider.dart';
 
 class ChangeMyInfo extends StatefulWidget {
   @override
@@ -10,20 +12,13 @@ class ChangeMyInfo extends StatefulWidget {
 }
 
 class _ChangeMyInfo extends State<ChangeMyInfo> {
-  final nickNameController = TextEditingController();
-  final pwdController = TextEditingController();
+  final usernameController = TextEditingController();
+  final usernameFocusNode = FocusNode();
+  final _usernameInputFocusNode = FocusNode();
+  final _usernameInputController = TextEditingController();
 
-  final nickNameFocusNode = FocusNode();
-
-  final _nickNameInputFocusNode = FocusNode();
-  final _pwdInputFocusNode = FocusNode();
-  final _nickNameInputController = TextEditingController();
-  final _pwdInputController = TextEditingController();
-
+  String? username;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  String nickName = '';
-  String pwd = '';
 
   @override
   void initState() {
@@ -38,6 +33,12 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
     } catch (err) {}
   }
 
+  checkError(_controller, type) {
+    if (_controller.text.isEmpty) {
+      return '최소 한 글자 이상 입력하세요';
+    }
+  }
+
   Widget inputRow(String hintText, FocusNode _focusNode,
       TextEditingController _controller, Function changeState, String type) {
     return Container(
@@ -47,69 +48,54 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
             padding: EdgeInsets.only(bottom: 10),
             child: TextFormField(
               obscureText: type == 'pwd' ? true : false,
-              validator: (val) {
-                if (val!.length == 0) {
-                  return '최소 한 글자 이상 입력해주세요';
-                }
-                return null;
+              validator: (value) {
+                return;
               },
-              onSaved: (newValue) {
-                changeState(newValue);
-              },
+              style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: DefaultComponents.achive50(), width: 2.0)),
                   labelText: hintText,
                   labelStyle: TextStyle(
-                      color: DefaultComponents.achive50(), fontSize: 13)),
+                      color: DefaultComponents.achive50(), fontSize: 13),
+                  errorText: checkError(_controller, type)),
               maxLines: 1,
               focusNode: _focusNode,
               controller: _controller,
               keyboardType: TextInputType.text,
               onChanged: (value) {
-                if (formKey.currentState!.validate()) {
-                  return;
-                } else {
-                  formKey.currentState!.save();
-                  changeState(value);
-                }
+                changeState(value);
               },
             ))
       ],
     ));
   }
 
-  Widget mainInput() {
-    return Column(
-      children: [
-        inputRow(
-            "변경할 닉네임을 입력하세요", _nickNameInputFocusNode, _nickNameInputController,
-            (val) {
-          setState(
-            () {
-              nickName = val;
-            },
-          );
-        }, "email"),
-        inputRow("비밀번호를 입력하세요", _pwdInputFocusNode, _pwdInputController, (val) {
-          setState(
-            () {
-              pwd = val;
-            },
-          );
-        }, "pwd"),
-      ],
-    );
-  }
+  // Widget mainInput() {
+  //   return Column(
+  //     children: [
+  //       inputRow(
+  //           "변경할 닉네임을 입력하세요", _usernameInputFocusNode, _usernameInputController,
+  //           (val) {
+  //         setState(
+  //           () {
+  //             username = val;
+  //           },
+  //         );
+  //       }, "username"),
+  //     ],
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
+    var userState = Provider.of<UserState>(context, listen: false);
     return GestureDetector(
         onTap: () => _dismissKeyboard(),
         child: Scaffold(
             appBar: CustomAppbar(
-              title: '내 정보 변경',
+              title: '${userState.username}님의 정보 변경',
               leading: true,
             ),
             body: Column(
@@ -121,7 +107,14 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
                       padding: EdgeInsets.only(
                           left: 30, right: 30, top: 20, bottom: 30),
                       margin: EdgeInsets.only(left: 20, right: 20),
-                      child: mainInput(),
+                      child: inputRow("변경할 닉네임을 입력하세요", _usernameInputFocusNode,
+                          _usernameInputController, (val) {
+                        setState(
+                          () {
+                            username = val;
+                          },
+                        );
+                      }, "email"),
                       decoration: BoxDecoration(
                           border: Border.all(
                               color: DefaultComponents.achive50(), width: 3.0),
@@ -132,19 +125,24 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
                 ),
                 InkWell(
                     onTap: () async {
-                      if (nickName == '' || pwd == '') {
+                      if (username == '' || username == null) {
                         return await MMBUtils.oneButtonAlert(
                             context, "", "필수 입력을 확인하세요");
                       }
-                      Map changeInfo = {
-                        "new_password1": pwd,
-                        "new_password2": nickName
-                      };
                       await MMBUtils.twoButtonAlert(
                           context, '변경하기', '변경하시겠습니까?', () async {
-                        await AuthUtils.passwordChange(context, changeInfo);
+                        bool patchResult =
+                            await AuthUtils.patchAuthUser(context, username!);
+                        if (!patchResult) {
+                          return MMBUtils.oneButtonAlert(
+                              context, "", "변경에 실패했습니다. 다른 닉네임을 시도해보세요");
+                        } else {
+                          setState(() {});
+                          Navigator.of(context).pop();
+                          return MMBUtils.oneButtonAlert(
+                              context, "", "변경되었습니다!");
+                        }
                       });
-                      // 비번 변경후 어떻게 할건지?
                     },
                     child: Container(
                         padding: EdgeInsets.all(5),

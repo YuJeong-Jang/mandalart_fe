@@ -11,6 +11,7 @@ class Welcome extends StatelessWidget {
         appBar: CustomAppbar(
           title: '만다라트로 계획을 세워보세요',
           leading: false,
+          preventOnTap: true,
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,

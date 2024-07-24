@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class MMBUtils {
@@ -6,10 +5,10 @@ class MMBUtils {
 
   MMBUtils(this.context);
 
-  static String BASE_URL =
-      'http://ec2-3-38-162-31.ap-northeast-2.compute.amazonaws.com/';
+  static String BASE_URL = 'https://api.rookies.site/';
+  // static String BASE_URL = 'https://api.checker-board.site/';
 
-  static List rutines = ["일회성", "매일", "매주", "매월", "매년"];
+  static Map rutines = {"일회성": 0, "매일": 1, "매주": 7, "매월": 30, "매년": 365};
 
   static Future oneButtonAlert(
       BuildContext context, String title, String content) {

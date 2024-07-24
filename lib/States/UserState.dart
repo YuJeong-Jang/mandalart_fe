@@ -12,7 +12,6 @@ class UserState with ChangeNotifier {
   String? password1;
   String? password2;
   String loginToken = '';
-  Member? userInfo;
   List<Board> boardList = [];
 
   changePk(int _val) {
@@ -57,11 +56,6 @@ class UserState with ChangeNotifier {
 
   changeLoginToken(String _val) {
     loginToken = _val;
-    notifyListeners();
-  }
-
-  changeUserInfo(Member _val) {
-    userInfo = _val;
     notifyListeners();
   }
 

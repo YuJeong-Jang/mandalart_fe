@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
+import 'package:make_me_better_mandalart_fe/Utils/CheckerUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 
 class ActionRegister extends StatefulWidget {
@@ -38,7 +39,7 @@ class _ActionRegister extends State<ActionRegister> {
 
   String mission = '';
   String action = '';
-  String rutine = '';
+  String setRutine = '';
   String goalUnit = '';
   String achiveUnit = '';
 
@@ -47,12 +48,14 @@ class _ActionRegister extends State<ActionRegister> {
     '상남자': '상남자',
     '사랑해!!': '사랑해!!',
   };
+  List rutineKeyList = [];
 
   bool showLoading = false;
 
   @override
   void initState() {
     super.initState();
+    setRutineList();
     _dismissKeyboard();
   }
 
@@ -63,12 +66,28 @@ class _ActionRegister extends State<ActionRegister> {
     } catch (err) {}
   }
 
+  void setRutineList() {
+    Map rutines = MMBUtils.rutines;
+    setState(() {
+      rutineKeyList = rutines.keys.toList();
+    });
+  }
+
+  checkError(_controller, type) {
+    if (type == 'unit') {
+      return '최소 한 글자\n이상 입력하세요';
+    }
+    if (_controller.text.isEmpty) {
+      return '최소 한 글자 이상 입력하세요';
+    }
+  }
+
   Widget rutineList() {
     return ListView.separated(
       scrollDirection: Axis.horizontal,
       itemCount: 5,
       itemBuilder: (context, index) {
-        String rutine = MMBUtils.rutines[index];
+        String rutine = rutineKeyList[index];
         return Container(
             margin: EdgeInsets.only(right: 3, left: 3),
             width: MediaQuery.of(context).size.width / 8,
@@ -76,14 +95,14 @@ class _ActionRegister extends State<ActionRegister> {
               borderRadius: BorderRadius.circular(10),
               border:
                   Border.all(color: DefaultComponents.achive50(), width: 2.0),
-              color: mission != '' && mission == rutine
+              color: setRutine == rutine
                   ? DefaultComponents.achive50()
                   : Colors.transparent,
             ),
             child: InkWell(
                 onTap: () async {
                   setState(() {
-                    mission = rutine;
+                    setRutine = rutine;
                   });
                 },
                 child: Center(
@@ -95,6 +114,31 @@ class _ActionRegister extends State<ActionRegister> {
       },
       separatorBuilder: (BuildContext context, int index) {
         return Container();
+      },
+    );
+  }
+
+  Widget textFormField(String hintText, FocusNode _focusNode,
+      TextEditingController _controller, Function changeState, String type) {
+    return TextFormField(
+      validator: (val) {
+        return;
+      },
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: DefaultComponents.achive50(), width: 2.0)),
+          labelText: hintText,
+          labelStyle:
+              TextStyle(color: DefaultComponents.achive50(), fontSize: 13),
+          errorText: checkError(_controller, type)),
+      maxLines: 1,
+      focusNode: _focusNode,
+      controller: _controller,
+      keyboardType: TextInputType.text,
+      onChanged: (value) {
+        changeState(value);
       },
     );
   }
@@ -115,10 +159,10 @@ class _ActionRegister extends State<ActionRegister> {
                         child: rutineList()))
                 : type == 'mission'
                     ? Container(
-                        width: 200,
+                        width: 300,
                         child: DropdownButton(
-                            items: dropDownList.keys
-                                .map<DropdownMenuItem<String>>((String value) {
+                            items: dropDownList.keys.map((String value) {
+                              print(value);
                               return DropdownMenuItem<String>(
                                   value: value,
                                   child: Container(
@@ -150,7 +194,12 @@ class _ActionRegister extends State<ActionRegister> {
                               '미션선택은 필수입니다',
                               style: TextStyle(color: Colors.red),
                             ),
-                            onChanged: (value) {},
+                            onChanged: (value) {
+                              setState(() {
+                                mission = value!;
+                              });
+                            },
+                            value: mission == '' ? null : mission,
                             focusColor: Colors.white,
                             style: TextStyle(
                               color: DefaultComponents.achive50(),
@@ -166,40 +215,48 @@ class _ActionRegister extends State<ActionRegister> {
                             iconEnabledColor: Colors.white,
                             dropdownColor: DefaultComponents.black()),
                       )
-                    : TextFormField(
-                        validator: (val) {
-                          if (val!.length == 0) {
-                            return '최소 한 글자 이상 입력해주세요';
-                          } else if (val.runtimeType == String) {
-                            return '숫자만 입력하세요';
-                          }
-                          return null;
-                        },
-                        onSaved: (newValue) {
-                          changeState(newValue);
-                        },
-                        decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: DefaultComponents.achive50(),
-                                    width: 2.0)),
-                            labelText: hintText,
-                            labelStyle: TextStyle(
-                                color: DefaultComponents.achive50(),
-                                fontSize: 13)),
-                        maxLines: 1,
-                        focusNode: _focusNode,
-                        controller: _controller,
-                        keyboardType: TextInputType.text,
-                        onChanged: (value) {
-                          if (formKey.currentState!.validate()) {
-                            return;
-                          } else {
-                            formKey.currentState!.save();
-                            changeState(value);
-                          }
-                        },
-                      ))
+                    : type == 'unit'
+                        ? Container(
+                            height: 200,
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                    top: 0,
+                                    child: Container(
+                                      width: 160,
+                                      child: textFormField(
+                                          "목표를 입력하세요\n(ex: 10회, 10km 등)",
+                                          _focusNode,
+                                          _controller,
+                                          changeState,
+                                          "goal"),
+                                    )),
+                                Positioned(
+                                    top: 60,
+                                    left: 180,
+                                    child: Container(
+                                        width: 110,
+                                        child: textFormField(
+                                            "단위를\n입력하세요",
+                                            _focusNode,
+                                            _controller,
+                                            changeState,
+                                            "unit"))),
+                                Positioned(
+                                    top: 110,
+                                    // right: 100,
+                                    child: Container(
+                                        width: 160,
+                                        child: textFormField(
+                                            "수행목표를 입력하세요\n(ex: 1회, 1km 등)",
+                                            _focusNode,
+                                            _controller,
+                                            changeState,
+                                            "action")))
+                              ],
+                            ))
+                        : textFormField(hintText, _focusNode, _controller,
+                            changeState, type))
       ],
     ));
   }
@@ -227,27 +284,36 @@ class _ActionRegister extends State<ActionRegister> {
             (val) {
           setState(
             () {
-              rutine = val;
+              setRutine = val;
             },
           );
         }, "rutine"),
         inputRow(
-            "목표단위를 입력해주세요", _goalUnitInputFocusNode, _goalUnitInputController,
+            "단위를 입력해주세요", _goalUnitInputFocusNode, _goalUnitInputController,
             (val) {
           setState(
             () {
-              goalUnit = val;
+              // goalUnit = val;
             },
           );
-        }, "goalUnit"),
-        inputRow("수행단위를 입력해주세요", _achiveUnitInputFocusNode,
-            _achiveUnitInputController, (val) {
-          setState(
-            () {
-              achiveUnit = val;
-            },
-          );
-        }, "achiveUnit"),
+        }, "unit"),
+        // inputRow(
+        //     "목표단위를 입력해주세요", _goalUnitInputFocusNode, _goalUnitInputController,
+        //     (val) {
+        //   setState(
+        //     () {
+        //       goalUnit = val;
+        //     },
+        //   );
+        // }, "goalUnit"),
+        // inputRow("수행단위를 입력해주세요", _achiveUnitInputFocusNode,
+        //     _achiveUnitInputController, (val) {
+        //   setState(
+        //     () {
+        //       achiveUnit = val;
+        //     },
+        //   );
+        // }, "achiveUnit"),
       ],
     );
   }
@@ -284,17 +350,29 @@ class _ActionRegister extends State<ActionRegister> {
                   children: [
                     InkWell(
                         onTap: () async {
-                          if (mission == '' ||
-                              action == '' ||
-                              rutine == '' ||
-                              goalUnit == '') {
-                            return await MMBUtils.oneButtonAlert(
-                                context, "", "필수 입력을 확인하세요");
+                          if (!widget.modify) {
+                            Navigator.pop(context);
+                          } else {
+                            await MMBUtils.twoButtonAlert(
+                                context, '삭제하기', '정말 삭제하시겠습니까?', () async {
+                              // 액션 아이디 바꿔야함
+                              // await CheckerUtils.deleteActionsAsId(context, 0);
+                              while (Navigator.canPop(context)) {
+                                Navigator.pop(context);
+                              }
+                            });
                           }
-                          if (rutine != goalUnit) {
-                            return await MMBUtils.oneButtonAlert(
-                                context, "", "비밀번호를 확인하세요");
-                          }
+                          // if (mission == '' ||
+                          //     action == '' ||
+                          //     rutine == '' ||
+                          //     goalUnit == '') {
+                          //   return await MMBUtils.oneButtonAlert(
+                          //       context, "", "필수 입력을 확인하세요");
+                          // }
+                          // if (rutine != goalUnit) {
+                          //   return await MMBUtils.oneButtonAlert(
+                          //       context, "", "비밀번호를 확인하세요");
+                          // }
                         },
                         child: Container(
                             padding: EdgeInsets.all(5),
@@ -306,7 +384,7 @@ class _ActionRegister extends State<ActionRegister> {
                                     color: DefaultComponents.achive50(),
                                     width: 2.0)),
                             child: Text(
-                              '삭제하기',
+                              widget.modify ? '삭제하기' : '뒤로가기',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -316,14 +394,10 @@ class _ActionRegister extends State<ActionRegister> {
                         onTap: () async {
                           if (mission == '' ||
                               action == '' ||
-                              rutine == '' ||
+                              setRutine == '' ||
                               goalUnit == '') {
                             return await MMBUtils.oneButtonAlert(
                                 context, "", "필수 입력을 확인하세요");
-                          }
-                          if (rutine != goalUnit) {
-                            return await MMBUtils.oneButtonAlert(
-                                context, "", "비밀번호를 확인하세요");
                           }
                         },
                         child: Container(

@@ -5,7 +5,6 @@ import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/States/ActionState.dart';
 import 'package:make_me_better_mandalart_fe/States/BoardState.dart';
 import 'package:make_me_better_mandalart_fe/States/MissionState.dart';
-import 'package:make_me_better_mandalart_fe/Utils/CheckerUtils.dart';
 import 'package:make_me_better_mandalart_fe/View/ActionRegister.dart';
 import 'package:make_me_better_mandalart_fe/View/MainDrawer.dart';
 import 'package:make_me_better_mandalart_fe/View/MissionRegister.dart';
@@ -31,43 +30,43 @@ class _MainPage extends State<MainPage> {
   List actions = [];
   List boards = [];
   List missions = [
-    // {
-    //   "엄태구": ["하루에 1000원씩 저금", "경제 뉴스레터 읽어보기", "아이템 달성하기"]
-    // },
-    // {
-    //   "세븐틴": ["태구야아 태구야아아아", "앓다죽겠네"]
-    // },
-    // {
-    //   "덴마크": ["아하하하하하하", "미챠분다 설레서", "나의사랑 너의사랑", "슬슬배고픈데"]
-    // }
+    {
+      "엄태구": ["하루에 1000원씩 저금", "경제 뉴스레터 읽어보기", "아이템 달성하기"]
+    },
+    {
+      "세븐틴": ["태구야아 태구야아아아", "앓다죽겠네"]
+    },
+    {
+      "덴마크": ["아하하하하하하", "미챠분다 설레서", "나의사랑 너의사랑", "슬슬배고픈데"]
+    }
   ];
 
   @override
   void initState() {
     super.initState();
     _drawerKey = GlobalKey();
-    // setState(() {
-    //   todayPercent = todayRate / 100;
-    //   totalPercent = totalRate / 100;
-    // });
-    initBoard();
     checkLength();
-  }
-
-  initBoard() async {
-    List boardsResult = await CheckerUtils.getBoards(context);
-    List missionsResult = await CheckerUtils.getMissions(context);
-    List actionsResult = await CheckerUtils.getActions(context);
     setState(() {
-      boards = boardsResult;
-      missions = missionsResult;
-      actions = actionsResult;
-      todayRate = boards[0]['daily_goal'];
-      totalRate = boards[0]['total_percentage'];
       todayPercent = todayRate / 100;
       totalPercent = totalRate / 100;
     });
+    // initBoard();
   }
+
+  // initBoard() async {
+  //   List boardsResult = await CheckerUtils.getBoards(context);
+  //   List missionsResult = await CheckerUtils.getMissions(context);
+  //   List actionsResult = await CheckerUtils.getActions(context);
+  //   setState(() {
+  //     boards = boardsResult;
+  //     missions = missionsResult;
+  //     actions = actionsResult;
+  //     todayRate = boards[0]['daily_goal'];
+  //     totalRate = boards[0]['total_percentage'];
+  //     todayPercent = todayRate / 100;
+  //     totalPercent = totalRate / 100;
+  //   });
+  // }
 
   checkLength() {
     if (missions.length != 4) {
@@ -198,6 +197,7 @@ class _MainPage extends State<MainPage> {
         appBar: CustomAppbar(
           title: boardState.title,
           leading: false,
+          preventOnTap: false,
         ),
         key: _drawerKey,
         drawer: MainDrawer(),

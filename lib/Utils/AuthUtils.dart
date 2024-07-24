@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/States/UserState.dart';
@@ -11,13 +9,13 @@ class AuthUtils {
 
   AuthUtils(this.context);
 
-  static String AUTH_URL = MMBUtils.BASE_URL + 'auth/';
+  static String AUTH_URL = MMBUtils.BASE_URL + 'api/auth/';
 
   static Future<bool> login(context, Map loginInfo) async {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
       Response response =
-          await Dio().post(AUTH_URL + '/login/', data: loginInfo);
+          await Dio().post(AUTH_URL + 'login/', data: loginInfo);
 
       if (response.statusCode == 200) {
         var key = response.data['key'];
@@ -27,6 +25,7 @@ class AuthUtils {
         return false;
       }
     } catch (e) {
+      print(e);
       return false;
     }
   }
@@ -34,7 +33,7 @@ class AuthUtils {
   static Future<String> logout(context) async {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
-      Response response = await Dio().post(AUTH_URL + '/logout/');
+      Response response = await Dio().post(AUTH_URL + 'logout/');
 
       if (response.statusCode == 200) {
         return response.data["detail"];
@@ -49,17 +48,15 @@ class AuthUtils {
   static Future<void> passwordChange(context, Map changeInfo) async {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
-      Response response = await Dio().post(AUTH_URL + '/password/change/',
+      Response response = await Dio().post(AUTH_URL + 'password/change/',
           data: changeInfo,
           options: Options(
               headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
         // 비번변경이면 로그아웃 시킬건지?
-      } else {
-      }
-    } catch (e) {
-    }
+      } else {}
+    } catch (e) {}
   }
 
   static Future<String> passwordReset(context) async {
@@ -67,7 +64,7 @@ class AuthUtils {
       var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {"email": "user@example.com"};
       Response response =
-          await Dio().post(AUTH_URL + '/password/reset/', data: inputData);
+          await Dio().post(AUTH_URL + 'password/reset/', data: inputData);
 
       if (response.statusCode == 200) {
         return response.data["detail"];
@@ -89,7 +86,7 @@ class AuthUtils {
         "token": "string"
       };
       Response response = await Dio()
-          .post(AUTH_URL + '/password/reset/confirm/', data: inputData);
+          .post(AUTH_URL + 'password/reset/confirm/', data: inputData);
 
       if (response.statusCode == 200) {
         return response.data["detail"];
@@ -105,7 +102,7 @@ class AuthUtils {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
       Response response =
-          await Dio().post(AUTH_URL + '/signup/', data: signupInfo);
+          await Dio().post(AUTH_URL + 'signup/', data: signupInfo);
 
       if (response.statusCode == 201) {
         var key = response.data['key'];
@@ -118,6 +115,7 @@ class AuthUtils {
         return false;
       }
     } catch (e) {
+      print(e);
       return false;
     }
   }
@@ -127,7 +125,7 @@ class AuthUtils {
       var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {"email": "user@example.com"};
       Response response =
-          await Dio().post(AUTH_URL + '/signup/resend-email/', data: inputData);
+          await Dio().post(AUTH_URL + 'signup/resend-email/', data: inputData);
 
       if (response.statusCode == 200) {
         return response.data["detail"];
@@ -144,7 +142,7 @@ class AuthUtils {
       var userState = Provider.of<UserState>(context, listen: false);
       Map inputData = {"key": "string"};
       Response response =
-          await Dio().post(AUTH_URL + '/signup/verify-email/', data: inputData);
+          await Dio().post(AUTH_URL + 'signup/verify-email/', data: inputData);
 
       if (response.statusCode == 200) {
         return response.data["detail"];
@@ -159,7 +157,7 @@ class AuthUtils {
   static Future<bool> getAuthUser(context) async {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
-      Response response = await Dio().get(AUTH_URL + '/user/',
+      Response response = await Dio().get(AUTH_URL + 'user/',
           options: Options(
               headers: {"Authorization": 'Token ' + userState.loginToken}));
 
@@ -170,7 +168,6 @@ class AuthUtils {
         await userState.changeEmail(result['email']);
         await userState.changeFirstName(result['first_name']);
         await userState.changeLastName(result['last_name']);
-        await userState.changeUserInfo(result);
         return true;
       } else {
         return false;
@@ -188,7 +185,7 @@ class AuthUtils {
         "first_name": "string",
         "last_name": "string"
       };
-      Response response = await Dio().put(AUTH_URL + '/user/',
+      Response response = await Dio().put(AUTH_URL + 'user/',
           data: inputData,
           options: Options(
               headers: {"Authorization": 'Token ' + userState.loginToken}));
@@ -203,25 +200,24 @@ class AuthUtils {
     }
   }
 
-  static Future<String> patchAuthUser(context) async {
+  static Future<bool> patchAuthUser(context, String username) async {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
-      Map inputData = {
-        "username": "NGjTCN98",
-        "first_name": "string",
-        "last_name": "string"
-      };
-      Response response = await Dio().patch(AUTH_URL + '/user/',
+      Map inputData = {"username": username, "first_name": "", "last_name": ""};
+      Response response = await Dio().patch(AUTH_URL + 'user/',
+          data: inputData,
           options: Options(
               headers: {"Authorization": 'Token ' + userState.loginToken}));
 
       if (response.statusCode == 200) {
-        return response.data;
+        await userState.changeUsername(response.data['username']);
+        return true;
       } else {
-        return "NOTHING";
+        return false;
       }
     } catch (e) {
-      return "NOTHING";
+      print(e);
+      return false;
     }
   }
 }
