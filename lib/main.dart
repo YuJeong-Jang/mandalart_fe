@@ -61,23 +61,24 @@ class MyApp extends StatelessWidget {
           ],
           supportedLocales: [Locale('ko', 'KR')],
           home:
-              // TestPage()
-              FlutterSplashScreen.fadeIn(
-            backgroundColor: DefaultComponents.black(),
-            onInit: () {
-              print("On Init");
-            },
-            onEnd: () {
-              print("On End");
-            },
-            childWidget: SizedBox(
-              child: Image.asset(
-                'assets/icons/taegu_sunhwa.jpeg',
-              ),
-            ),
-            onAnimationEnd: () => print("On Fade In End"),
-            nextScreen: NavigationSwitcher(),
-          )),
+              TestPage()
+          //     FlutterSplashScreen.fadeIn(
+          //   backgroundColor: DefaultComponents.black(),
+          //   onInit: () {
+          //     print("On Init");
+          //   },
+          //   onEnd: () {
+          //     print("On End");
+          //   },
+          //   childWidget: SizedBox(
+          //     child: Image.asset(
+          //       'assets/icons/taegu_sunhwa.jpeg',
+          //     ),
+          //   ),
+          //   onAnimationEnd: () => print("On Fade In End"),
+          //   nextScreen: NavigationSwitcher(),
+          // )
+          ),
     );
   }
 }

@@ -12,12 +12,12 @@ class ChangeMyInfo extends StatefulWidget {
 }
 
 class _ChangeMyInfo extends State<ChangeMyInfo> {
-  final usernameController = TextEditingController();
-  final usernameFocusNode = FocusNode();
-  final _usernameInputFocusNode = FocusNode();
-  final _usernameInputController = TextEditingController();
+  final nameController = TextEditingController();
+  final nameFocusNode = FocusNode();
+  final _nameInputFocusNode = FocusNode();
+  final _nameInputController = TextEditingController();
 
-  String? username;
+  String? name;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -76,14 +76,14 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
   //   return Column(
   //     children: [
   //       inputRow(
-  //           "변경할 닉네임을 입력하세요", _usernameInputFocusNode, _usernameInputController,
+  //           "변경할 닉네임을 입력하세요", _nameInputFocusNode, _nameInputController,
   //           (val) {
   //         setState(
   //           () {
-  //             username = val;
+  //             name = val;
   //           },
   //         );
-  //       }, "username"),
+  //       }, "name"),
   //     ],
   //   );
   // }
@@ -95,7 +95,7 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
         onTap: () => _dismissKeyboard(),
         child: Scaffold(
             appBar: CustomAppbar(
-              title: '${userState.username}님의 정보 변경',
+              title: '${userState.name}님의 정보 변경',
               leading: true,
             ),
             body: Column(
@@ -107,11 +107,11 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
                       padding: EdgeInsets.only(
                           left: 30, right: 30, top: 20, bottom: 30),
                       margin: EdgeInsets.only(left: 20, right: 20),
-                      child: inputRow("변경할 닉네임을 입력하세요", _usernameInputFocusNode,
-                          _usernameInputController, (val) {
+                      child: inputRow("변경할 닉네임을 입력하세요", _nameInputFocusNode,
+                          _nameInputController, (val) {
                         setState(
                           () {
-                            username = val;
+                            name = val;
                           },
                         );
                       }, "email"),
@@ -125,14 +125,21 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
                 ),
                 InkWell(
                     onTap: () async {
-                      if (username == '' || username == null) {
+                      var userState =
+                          Provider.of<UserState>(context, listen: false);
+                      if (name == '' || name == null) {
                         return await MMBUtils.oneButtonAlert(
                             context, "", "필수 입력을 확인하세요");
                       }
                       await MMBUtils.twoButtonAlert(
                           context, '변경하기', '변경하시겠습니까?', () async {
-                        bool patchResult =
-                            await AuthUtils.patchAuthUser(context, username!);
+                        Map changeInfo = {
+                          "name": name,
+                          "pwd": userState.pwd,
+                          "type": 'name'
+                        };
+                        bool patchResult = await AuthUtils.changeMemberInfo(
+                            context, changeInfo);
                         if (!patchResult) {
                           return MMBUtils.oneButtonAlert(
                               context, "", "변경에 실패했습니다. 다른 닉네임을 시도해보세요");

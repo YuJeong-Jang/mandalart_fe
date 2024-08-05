@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Models/Board.dart';
-import 'package:make_me_better_mandalart_fe/Models/Member.dart';
 
 class UserState with ChangeNotifier {
-  int pk = 1;
-  String username = '';
+  String document_id = "";
+  String name = '';
   String email = '';
-  String? first_name;
-  String? last_name;
+  String? pwd;
+  int? pwd_mod_dt;
   String? token;
-  String? password1;
-  String? password2;
-  String loginToken = '';
-  List<Board> boardList = [];
+  Map? boardInfo;
+  int? reg_dt;
+  int? mod_dt;
 
-  changePk(int _val) {
-    pk = _val;
+  changeDocumentId(String _val) {
+    document_id = _val;
     notifyListeners();
   }
 
-  changeUsername(String _val) {
-    username = _val;
+  changeName(String _val) {
+    name = _val;
     notifyListeners();
   }
 
@@ -29,38 +27,33 @@ class UserState with ChangeNotifier {
     notifyListeners();
   }
 
-  changeFirstName(String _val) {
-    first_name = _val;
-    notifyListeners();
-  }
-
-  changeLastName(String _val) {
-    last_name = _val;
-    notifyListeners();
-  }
-
   changeToken(String _val) {
     token = _val;
     notifyListeners();
   }
 
-  changePassword1(String _val) {
-    password1 = _val;
+  changePwd(String _val) {
+    pwd = _val;
     notifyListeners();
   }
 
-  changePassword2(String _val) {
-    password2 = _val;
+  changePwdModDt(int _val) {
+    pwd_mod_dt = _val;
     notifyListeners();
   }
 
-  changeLoginToken(String _val) {
-    loginToken = _val;
+  changeBoardInfo(Map _val) {
+    boardInfo = _val;
     notifyListeners();
   }
 
-  changeBoardList(List<Board> _val) {
-    boardList = _val;
+  changeRegDt(int _val) {
+    reg_dt = _val;
+    notifyListeners();
+  }
+
+  changeModDt(int _val) {
+    mod_dt = _val;
     notifyListeners();
   }
 }

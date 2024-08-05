@@ -6,7 +6,6 @@ class MMBUtils {
   MMBUtils(this.context);
 
   static String BASE_URL = 'https://api.rookies.site/';
-  // static String BASE_URL = 'https://api.checker-board.site/';
 
   static Map rutines = {"일회성": 0, "매일": 1, "매주": 7, "매월": 30, "매년": 365};
 

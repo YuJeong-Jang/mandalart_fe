@@ -4,47 +4,29 @@ part 'Member.g.dart';
 
 @JsonSerializable()
 class Member {
-  int pk;
-  String username;
+  String document_id;
+  String name;
   String email;
-  String? first_name;
-  String? last_name;
   String? token;
-  String? password1;
-  String? password2;
-  Member(
-    this.pk,
-    this.username,
-    this.email,
-    this.first_name,
-    this.last_name,
-    this.token,
-    this.password1,
-    this.password2,
-  );
+  String? pwd;
+  int? pwd_mod_dt;
+  int? reg_dt;
+  int? mod_dt;
+  Member(this.document_id, this.name, this.email, this.token, this.pwd,
+      this.pwd_mod_dt, this.reg_dt, this.mod_dt);
 
   factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);
 
-  factory Member.fromNamed({
-    required int pk,
-    required String username,
-    required String email,
-    String? first_name,
-    String? last_name,
-    String? token,
-    String? password1,
-    String? password2,
-  }) =>
-      Member(
-        pk,
-        username,
-        email,
-        first_name,
-        last_name,
-        token,
-        password1,
-        password2
-      );
+  factory Member.fromNamed(
+          {required String document_id,
+          required String name,
+          required String email,
+          String? token,
+          String? pwd,
+          int? pwd_mod_dt,
+          int? reg_dt,
+          int? mod_dt}) =>
+      Member(document_id, name, email, token, pwd, pwd_mod_dt, reg_dt, mod_dt);
 
   Map<String, dynamic> toJson() => _$MemberToJson(this);
 }

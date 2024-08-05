@@ -18,8 +18,7 @@ class CheckerUtils {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
       Response response = await Dio().get(CHECKER_URL + 'actions/',
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -45,8 +44,7 @@ class CheckerUtils {
       };
       Response response = await Dio().post(CHECKER_URL + 'actions/',
           data: inputData,
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 201) {
         return response.data;
@@ -62,8 +60,7 @@ class CheckerUtils {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
       Response response = await Dio().get(CHECKER_URL + '/actions/${"userId"}/',
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -89,8 +86,7 @@ class CheckerUtils {
       };
       Response response = await Dio().put(CHECKER_URL + 'actions/${"userId"}/',
           data: inputData,
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -117,8 +113,7 @@ class CheckerUtils {
       Response response = await Dio().patch(
           CHECKER_URL + 'actions/${"userId"}/',
           data: inputData,
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -135,8 +130,7 @@ class CheckerUtils {
       var userState = Provider.of<UserState>(context, listen: false);
       Response response = await Dio().delete(
           CHECKER_URL + 'actions/${"userId"}/',
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 204) {
         return response.data;
@@ -152,8 +146,7 @@ class CheckerUtils {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
       Response response = await Dio().get(CHECKER_URL + 'baords/',
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -171,8 +164,7 @@ class CheckerUtils {
       var boardState = Provider.of<BoardState>(context, listen: false);
       Response response = await Dio().post(CHECKER_URL + 'boards/',
           data: boardInfo,
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 201) {
         var result = response.data;
@@ -200,8 +192,7 @@ class CheckerUtils {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
       Response response = await Dio().get(CHECKER_URL + 'baords/${'userId'}/',
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -225,8 +216,7 @@ class CheckerUtils {
       };
       Response response = await Dio().put(CHECKER_URL + 'baords/${'userId'}/',
           data: inputData,
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -250,8 +240,7 @@ class CheckerUtils {
       };
       Response response = await Dio().patch(CHECKER_URL + 'baords/${'userId'}/',
           data: inputData,
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -268,8 +257,7 @@ class CheckerUtils {
       var userState = Provider.of<UserState>(context, listen: false);
       Response response = await Dio().delete(
           CHECKER_URL + 'baords/${'userId'}/',
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 204) {
         return response.data;
@@ -285,8 +273,7 @@ class CheckerUtils {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
       Response response = await Dio().get(CHECKER_URL + 'missions/',
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -304,8 +291,7 @@ class CheckerUtils {
       Map inputData = {"title": "string", "board_id": 0};
       Response response = await Dio().post(CHECKER_URL + 'missions/',
           data: inputData,
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 201) {
         return response.data;
@@ -321,8 +307,7 @@ class CheckerUtils {
     try {
       var userState = Provider.of<UserState>(context, listen: false);
       Response response = await Dio().get(CHECKER_URL + 'missions/${'userId'}/',
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -346,8 +331,7 @@ class CheckerUtils {
       };
       Response response = await Dio().put(CHECKER_URL + 'missions/${'userId'}/',
           data: inputData,
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -372,8 +356,7 @@ class CheckerUtils {
       Response response = await Dio().patch(
           CHECKER_URL + 'missions/${'userId'}/',
           data: inputData,
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
         return response.data;
@@ -390,8 +373,7 @@ class CheckerUtils {
       var userState = Provider.of<UserState>(context, listen: false);
       Response response = await Dio().patch(
           CHECKER_URL + 'missions/${'userId'}/',
-          options: Options(
-              headers: {"Authorization": 'Token ' + userState.loginToken}));
+          options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 204) {
         return response.data;

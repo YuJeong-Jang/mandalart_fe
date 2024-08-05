@@ -5,6 +5,7 @@ import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
 import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
+import 'package:make_me_better_mandalart_fe/Utils/CryptoUtils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -171,21 +172,21 @@ class _Login extends State<Login> {
                       }
                       Map loginInfo = {
                         "email": email,
-                        "password": pwd,
+                        "pwd": getEncrypt(pwd),
                       };
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       await prefs.setString('@email', email);
-                      await prefs.setString('@password', pwd);
+                      await prefs.setString('@password', getEncrypt(pwd));
 
                       bool loginResult =
-                          await AuthUtils.login(context, loginInfo);
+                          await AuthUtils.getToken(context, loginInfo);
                       if (!loginResult) {
                         return await MMBUtils.oneButtonAlert(
                             context, "", "로그인에 실패했습니다. 다시 시도해 주세요");
                       }
                       bool getAuthUserResult =
-                          await AuthUtils.getAuthUser(context);
+                          await AuthUtils.login(context);
                       if (!getAuthUserResult) {
                         return await MMBUtils.oneButtonAlert(
                             context, "", "로그인에 실패했습니다. 다시 시도해 주세요");

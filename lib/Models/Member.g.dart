@@ -7,23 +7,23 @@ part of 'Member.dart';
 // **************************************************************************
 
 Member _$MemberFromJson(Map<String, dynamic> json) => Member(
-      (json['pk'] as num).toInt(),
-      json['username'] as String,
+      json['document_id'] as String,
+      json['name'] as String,
       json['email'] as String,
-      json['first_name'] as String?,
-      json['last_name'] as String?,
       json['token'] as String?,
-      json['password1'] as String?,
-      json['password2'] as String?,
+      json['pwd'] as String?,
+      json['pwd_mod_dt'] as int?,
+      json['reg_dt'] as int?,
+      json['mod_dt'] as int?,
     );
 
 Map<String, dynamic> _$MemberToJson(Member instance) => <String, dynamic>{
-      'pk': instance.pk,
-      'username': instance.username,
+      'document_id': instance.document_id,
+      'name': instance.name,
       'email': instance.email,
-      'first_name': instance.first_name,
-      'last_name': instance.last_name,
       'token': instance.token,
-      'password1': instance.password1,
-      'password2': instance.password2,
+      'pwd': instance.pwd,
+      'pwd_mod_dt': instance.pwd_mod_dt,
+      'reg_dt': instance.reg_dt,
+      'mod_dt': instance.mod_dt,
     };

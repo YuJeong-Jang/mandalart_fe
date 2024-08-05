@@ -4,6 +4,7 @@ import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
 import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
+import 'package:make_me_better_mandalart_fe/Utils/CryptoUtils.dart';
 import 'package:make_me_better_mandalart_fe/View/Login.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,7 +35,7 @@ class _Join extends State<Join> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  String username = '';
+  String name = '';
   String email = '';
   String pwd = '';
   String pwdChk = '';
@@ -126,7 +127,7 @@ class _Join extends State<Join> {
             (val) {
           setState(
             () {
-              username = val;
+              name = val;
             },
           );
         }, "text"),
@@ -205,7 +206,7 @@ class _Join extends State<Join> {
                       setState(() {
                         showLoading = true;
                       });
-                      if (username == '' ||
+                      if (name == '' ||
                           email == '' ||
                           pwd == '' ||
                           pwdChk == '') {
@@ -217,26 +218,19 @@ class _Join extends State<Join> {
                             context, "", "비밀번호를 확인하세요");
                       }
                       Map signupInfo = {
-                        "username": username,
+                        "name": name,
                         "email": email,
-                        "password1": pwd,
-                        "password2": pwdChk
+                        "pwd": getEncrypt(pwd),
                       };
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
-                      await prefs.setString('@username', username);
+                      await prefs.setString('@name', name);
                       await prefs.setString('@email', email);
-                      await prefs.setString('@password', pwd);
+                      await prefs.setString('@password', getEncrypt(pwd));
 
                       bool signupResult =
                           await AuthUtils.signup(context, signupInfo);
                       if (!signupResult) {
-                        return await MMBUtils.oneButtonAlert(
-                            context, "", "회원가입에 실패했습니다. 다시 시도해 주세요");
-                      }
-                      bool getAuthUserResult =
-                          await AuthUtils.getAuthUser(context);
-                      if (!getAuthUserResult) {
                         return await MMBUtils.oneButtonAlert(
                             context, "", "회원가입에 실패했습니다. 다시 시도해 주세요");
                       }

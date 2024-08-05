@@ -16,7 +16,8 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     var userState = Provider.of<UserState>(context, listen: false);
-    bool registBoard = userState.boardList.length > 0;
+    bool registBoard = false;
+    // userState.boardInfo?.keys.length > 0;
     return new AppBar(
       title: InkWell(
         onTap: () {

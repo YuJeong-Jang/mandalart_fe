@@ -45,7 +45,7 @@ class _MainDrawer extends State<MainDrawer> {
                 ),
               ),
               TextSpan(
-                text: userState.username,
+                text: userState.name,
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -102,8 +102,7 @@ class _MainDrawer extends State<MainDrawer> {
                   Provider.of<NavigationState>(context, listen: false);
               await MMBUtils.twoButtonAlert(context, "로그아웃", "로그아웃 하시겠습니까?",
                   () async {
-                await AuthUtils.logout(context);
-                await prefs.remove("@username");
+                await prefs.remove("@name");
                 await prefs.remove("@email");
                 await prefs.remove("@password");
                 Navigator.of(context).pop();
