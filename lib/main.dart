@@ -1,7 +1,7 @@
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:make_me_better_mandalart_fe/NavigationSwitcher.dart';
 import 'package:make_me_better_mandalart_fe/States/ActionState.dart';
 import 'package:make_me_better_mandalart_fe/States/BoardState.dart';
@@ -19,7 +19,7 @@ import 'package:make_me_better_mandalart_fe/View/TestPage.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  initializeDateFormatting('ko_KR').then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -47,38 +47,32 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
+        
           debugShowCheckedModeBanner: false,
           title: 'make me better',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-            scaffoldBackgroundColor: DefaultComponents.black(),
+            scaffoldBackgroundColor: Colors.black,
             fontFamily: 'Pretendard',
             useMaterial3: true,
           ),
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: [Locale('ko', 'KR')],
           home:
-              TestPage()
-          //     FlutterSplashScreen.fadeIn(
-          //   backgroundColor: DefaultComponents.black(),
-          //   onInit: () {
-          //     print("On Init");
-          //   },
-          //   onEnd: () {
-          //     print("On End");
-          //   },
-          //   childWidget: SizedBox(
-          //     child: Image.asset(
-          //       'assets/icons/taegu_sunhwa.jpeg',
-          //     ),
-          //   ),
-          //   onAnimationEnd: () => print("On Fade In End"),
-          //   nextScreen: NavigationSwitcher(),
-          // )
-          ),
+              // TestPage()
+              FlutterSplashScreen.fadeIn(
+            backgroundColor: Colors.black,
+            childWidget: SizedBox(
+                child: Icon(
+              Icons.view_module,
+              color: Colors.white,
+            )),
+            nextScreen: NavigationSwitcher(),
+          )),
     );
   }
 }

@@ -9,7 +9,7 @@ class AuthUtils {
 
   AuthUtils(this.context);
 
-  static String AUTH_URL = MMBUtils.BASE_URL + 'api/member/';
+  static String AUTH_URL = MMBUtils.BASE_URL + 'member/';
 
   static Future<bool> getToken(context, Map loginInfo) async {
     try {
@@ -21,14 +21,18 @@ class AuthUtils {
         await userState.changeToken(token);
         return true;
       } else {
-        if (response.statusCode == 404) {
-          await MMBUtils.oneButtonAlert(
-              context, "", "회원님의 정보를 찾을 수 없습니다. 회원정보를 확인해주세요.");
-        }
         return false;
       }
-    } catch (e) {
+    } on DioException catch (e) {
       print(e);
+      if (e.response?.data['errorCode'] == 'INVALID_AUTH') {
+        await MMBUtils.oneButtonAlert(context, "", "고객인증에 실패했습니다. 정보를 확인해주세요.");
+      } else if (e.response?.data['errorCode'] == 'MEMBER_NOT_FOUND') {
+        await MMBUtils.oneButtonAlert(
+            context, "", "고객정보를 찾을 수 없습니다. 정보를 확인해주세요.");
+      } else {
+        await MMBUtils.oneButtonAlert(context, "", "오류가 발생했습니다. 다시 시도해 주세요.");
+      }
       return false;
     }
   }
@@ -51,11 +55,18 @@ class AuthUtils {
         await userState.changeModDt(result['mod_dt']);
         return true;
       } else {
-        await MMBUtils.oneButtonAlert(context, "", "오류가 발생했습니다. 다시 시도해 주세요.");
         return false;
       }
-    } catch (e) {
+    } on DioException catch (e) {
       print(e);
+      if (e.response?.data['errorCode'] == 'ALREADY_JOINED') {
+        await MMBUtils.oneButtonAlert(context, "", "이미 가입하신 고객입니다.");
+      } else if (e.response?.data['errorCode'] == 'DELETED_MEMBER') {
+        await MMBUtils.oneButtonAlert(
+            context, "", "탈퇴한 고객입니다. 탈퇴한 이메일로는 재가입이 불가합니다.");
+      } else {
+        await MMBUtils.oneButtonAlert(context, "", "가입에 실패했습니다. 다시 시도해 주세요.");
+      }
       return false;
     }
   }
@@ -68,8 +79,6 @@ class AuthUtils {
 
       if (response.statusCode == 200) {
         var result = response.data['memberInfo'];
-        var token = response.data['token'];
-        await userState.changeToken(token);
         await userState.changeDocumentId(result['document_id']);
         await userState.changeEmail(result['email']);
         await userState.changeName(result['name']);
@@ -77,12 +86,18 @@ class AuthUtils {
         await userState.changePwdModDt(result['pwd_mod_dt']);
         await userState.changeRegDt(result['reg_dt']);
         await userState.changeModDt(result['mod_dt']);
-        await userState.changeBoardInfo(response.data['boardInfo']);
+        await userState.changeBoardInfo(response.data['boardInfo'] ?? {});
         return true;
       } else {
         return false;
       }
-    } catch (e) {
+    } on DioException catch (e) {
+      print(e);
+      if (e.response?.data['errorCode'] == 'INVALID_AUTH') {
+        await MMBUtils.oneButtonAlert(context, "", "고객인증에 실패했습니다.");
+      } else {
+        await MMBUtils.oneButtonAlert(context, "", "로그인에 실패했습니다. 정보를 확인해주세요.");
+      }
       return false;
     }
   }
@@ -95,13 +110,21 @@ class AuthUtils {
           options: Options(headers: {"Authorization": userState.token}));
 
       if (response.statusCode == 200) {
-        // 비번변경이면 로그아웃 시킬건지?
+        var result = response.data['memberInfo'];
+        await userState.changeName(result['name']);
+        // 비번 변경시 로그아웃?
+        // await userState.changePwd(result['pwd']);
         return true;
       } else {
         return false;
       }
-    } catch (e) {
+    } on DioException catch (e) {
       print(e);
+      if (e.response?.data['errorCode'] == 'INVALID_AUTH') {
+        await MMBUtils.oneButtonAlert(context, "", "고객인증에 실패했습니다.");
+      } else {
+        await MMBUtils.oneButtonAlert(context, "", "수정에 실패했습니다. 다시 시도해주세요.");
+      }
       return false;
     }
   }

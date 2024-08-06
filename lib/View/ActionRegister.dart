@@ -213,7 +213,7 @@ class _ActionRegister extends State<ActionRegister> {
                                           width: 2.0))),
                             ),
                             iconEnabledColor: Colors.white,
-                            dropdownColor: DefaultComponents.black()),
+                            dropdownColor: Colors.black),
                       )
                     : type == 'unit'
                         ? Container(

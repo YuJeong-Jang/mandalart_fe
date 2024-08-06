@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
+import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
 import 'package:make_me_better_mandalart_fe/States/UserState.dart';
 import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
@@ -72,22 +73,6 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
     ));
   }
 
-  // Widget mainInput() {
-  //   return Column(
-  //     children: [
-  //       inputRow(
-  //           "변경할 닉네임을 입력하세요", _nameInputFocusNode, _nameInputController,
-  //           (val) {
-  //         setState(
-  //           () {
-  //             name = val;
-  //           },
-  //         );
-  //       }, "name"),
-  //     ],
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     var userState = Provider.of<UserState>(context, listen: false);
@@ -125,8 +110,8 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
                 ),
                 InkWell(
                     onTap: () async {
-                      var userState =
-                          Provider.of<UserState>(context, listen: false);
+                      var navigationState =
+                          Provider.of<NavigationState>(context, listen: false);
                       if (name == '' || name == null) {
                         return await MMBUtils.oneButtonAlert(
                             context, "", "필수 입력을 확인하세요");
@@ -135,17 +120,20 @@ class _ChangeMyInfo extends State<ChangeMyInfo> {
                           context, '변경하기', '변경하시겠습니까?', () async {
                         Map changeInfo = {
                           "name": name,
-                          "pwd": userState.pwd,
+                          // "pwd": userState.pwd,
                           "type": 'name'
                         };
                         bool patchResult = await AuthUtils.changeMemberInfo(
                             context, changeInfo);
                         if (!patchResult) {
-                          return MMBUtils.oneButtonAlert(
-                              context, "", "변경에 실패했습니다. 다른 닉네임을 시도해보세요");
+                          return;
                         } else {
                           setState(() {});
                           Navigator.of(context).pop();
+                          navigationState.changeState(NavigationStateEnum.home);
+                          if (Navigator.of(context).canPop()) {
+                            Navigator.of(context).pop();
+                          }
                           return MMBUtils.oneButtonAlert(
                               context, "", "변경되었습니다!");
                         }

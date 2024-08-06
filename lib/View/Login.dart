@@ -35,7 +35,7 @@ class _Login extends State<Login> {
     super.initState();
     if (kDebugMode) {
       setState(() {
-        email = 'vbnm@llll.com';
+        email = 'aridoasis@naver.com';
         pwd = 'lovely91!';
       });
     }
@@ -73,19 +73,8 @@ class _Login extends State<Login> {
             child: TextFormField(
               obscureText: type == 'pwd' ? true : false,
               validator: (val) {
-                // if (val!.length == 0) {
-                //   return '최소 한 글자 이상 입력해주세요';
-                // }
-                // if (type == 'email' &&
-                //     (!val.contains('@') || !val.contains('.'))) {
-                //   return '이메일 형식을 확인하세요';
-                // }
                 return;
-                // null;
               },
-              // onSaved: (newValue) {
-              //   changeState(newValue);
-              // },
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
@@ -100,12 +89,7 @@ class _Login extends State<Login> {
               controller: _controller,
               keyboardType: TextInputType.text,
               onChanged: (value) {
-                // if (formKey.currentState!.validate()) {
-                //   return;
-                // } else {
-                //   formKey.currentState!.save();
                 changeState(value);
-                // }
               },
             ))
       ],
@@ -182,14 +166,11 @@ class _Login extends State<Login> {
                       bool loginResult =
                           await AuthUtils.getToken(context, loginInfo);
                       if (!loginResult) {
-                        return await MMBUtils.oneButtonAlert(
-                            context, "", "로그인에 실패했습니다. 다시 시도해 주세요");
+                        return;
                       }
-                      bool getAuthUserResult =
-                          await AuthUtils.login(context);
+                      bool getAuthUserResult = await AuthUtils.login(context);
                       if (!getAuthUserResult) {
-                        return await MMBUtils.oneButtonAlert(
-                            context, "", "로그인에 실패했습니다. 다시 시도해 주세요");
+                        return;
                       }
                       navigationState.changeState(NavigationStateEnum.home);
                       if (Navigator.of(context).canPop()) {

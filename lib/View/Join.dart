@@ -231,8 +231,7 @@ class _Join extends State<Join> {
                       bool signupResult =
                           await AuthUtils.signup(context, signupInfo);
                       if (!signupResult) {
-                        return await MMBUtils.oneButtonAlert(
-                            context, "", "회원가입에 실패했습니다. 다시 시도해 주세요");
+                        return;
                       }
                       setState(() {
                         showLoading = false;

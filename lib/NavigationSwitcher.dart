@@ -32,10 +32,14 @@ class _NavigationSwitcherState extends State<NavigationSwitcher> {
         useremail != null &&
         pwd != null &&
         pwd != '') {
-      bool loginResult =
-          await AuthUtils.getToken(context, {'email': useremail, 'password': pwd});
+      bool loginResult = await AuthUtils.getToken(
+          context, {'email': useremail, 'password': pwd});
       if (!loginResult) {
-        return MMBUtils.oneButtonAlert(context, "", "로그인에 실패했습니다. 다시 시도해 주세요");
+        return;
+      }
+      bool getAuthUserResult = await AuthUtils.login(context);
+      if (!getAuthUserResult) {
+        return;
       }
       state.changeState(NavigationStateEnum.home);
     } else {

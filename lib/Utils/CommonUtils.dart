@@ -5,7 +5,8 @@ class MMBUtils {
 
   MMBUtils(this.context);
 
-  static String BASE_URL = 'https://api.rookies.site/';
+  static String BASE_URL = 'https://asia-northeast1-mandalart-abd26.cloudfunctions.net/v1/app/'; // 운영
+  // static String BASE_URL = 'http://192.168.68.56:5002/mandalart-abd26/asia-northeast1/v1/app/'; // 로컬
 
   static Map rutines = {"일회성": 0, "매일": 1, "매주": 7, "매월": 30, "매년": 365};
 
