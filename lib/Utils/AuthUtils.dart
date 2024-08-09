@@ -86,7 +86,7 @@ class AuthUtils {
         await userState.changePwdModDt(result['pwd_mod_dt']);
         await userState.changeRegDt(result['reg_dt']);
         await userState.changeModDt(result['mod_dt']);
-        await userState.changeBoardInfo(response.data['boardInfo'] ?? {});
+        await userState.changeBoardInfo(response.data['boardInfo']);
         return true;
       } else {
         return false;
@@ -112,6 +112,7 @@ class AuthUtils {
       if (response.statusCode == 200) {
         var result = response.data['memberInfo'];
         await userState.changeName(result['name']);
+        await userState.changeToken(response.data['token']);
         // 비번 변경시 로그아웃?
         // await userState.changePwd(result['pwd']);
         return true;

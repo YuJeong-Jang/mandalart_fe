@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
-import 'package:make_me_better_mandalart_fe/Utils/CheckerUtils.dart';
+import 'package:make_me_better_mandalart_fe/Models/Mission.dart';
+import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
+import 'package:make_me_better_mandalart_fe/Utils/BoardsUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
+import 'package:make_me_better_mandalart_fe/Utils/MissionsUtils.dart';
+import 'package:provider/provider.dart';
 
 class MissionRegister extends StatefulWidget {
   bool modify = false;
@@ -190,7 +194,7 @@ class _MissionRegister extends State<MissionRegister> {
                             await MMBUtils.twoButtonAlert(
                                 context, '삭제하기', '정말 삭제하시겠습니까?', () async {
                               // 미션 아이디 바꿔야함
-                              // await CheckerUtils.deleteMissionsAsId(context, 0);
+                              await MissionsUtils.deleteMission(context, "");
                               while (Navigator.canPop(context)) {
                                 Navigator.pop(context);
                               }
@@ -218,6 +222,35 @@ class _MissionRegister extends State<MissionRegister> {
                           if (mission == '' || rutine == '') {
                             return await MMBUtils.oneButtonAlert(
                                 context, "", "필수 입력을 확인하세요");
+                          }
+                          var navigationState = Provider.of<NavigationState>(
+                              context,
+                              listen: false);
+                          Mission missionInfo = Mission.fromNamed(
+                            document_id: '',
+                            mission_name: mission,
+                            board_id: '',
+                          );
+
+                          bool postMissionResult;
+                          if (widget.modify) {
+                            postMissionResult =
+                                await MissionsUtils.updateMission(
+                                    context, missionInfo);
+                          } else {
+                            postMissionResult = await MissionsUtils.postMission(
+                                context, missionInfo);
+                          }
+                          if (!postMissionResult) {
+                            return;
+                            // MMBUtils.oneButtonAlert(
+                            //     context, "", "등록에 실패했습니다");
+                          } else {
+                            navigationState
+                                .changeState(NavigationStateEnum.home);
+                            if (Navigator.of(context).canPop()) {
+                              Navigator.of(context).pop();
+                            }
                           }
                         },
                         child: Container(

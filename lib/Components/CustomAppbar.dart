@@ -53,7 +53,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
                 Navigator.of(context).pop();
               },
             )
-          : null,
+          : Container(),
     );
   }
 

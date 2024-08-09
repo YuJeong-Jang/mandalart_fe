@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
+import 'package:make_me_better_mandalart_fe/Models/Board.dart';
 import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
-import 'package:make_me_better_mandalart_fe/Utils/CheckerUtils.dart';
+import 'package:make_me_better_mandalart_fe/States/UserState.dart';
+import 'package:make_me_better_mandalart_fe/Utils/BoardsUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 import 'package:provider/provider.dart';
 
@@ -18,27 +20,27 @@ class BoardRegister extends StatefulWidget {
 
 class _BoardRegister extends State<BoardRegister> {
   final scrollerControoer = ScrollController();
-  final titleController = TextEditingController();
+  final boardNmController = TextEditingController();
   final dailyGoalController = TextEditingController();
   final startAtController = TextEditingController();
   final endAtController = TextEditingController();
 
-  final titleFocusNode = FocusNode();
+  final boardNmFocusNode = FocusNode();
   final dailyGoalFocusNode = FocusNode();
 
-  final _titleInputFocusNode = FocusNode();
+  final _boardNmInputFocusNode = FocusNode();
   final _dailyGoalInputFocusNode = FocusNode();
   final _goalPeriodInputFocusNode = FocusNode();
   final _endAtInputFocusNode = FocusNode();
-  final _titleInputController = TextEditingController();
+  final _boardNmInputController = TextEditingController();
   final _dailyGoalInputController = TextEditingController();
   final _goalPeriodInputController = TextEditingController();
   final _endAtInputController = TextEditingController();
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  String title = '';
-  String dailyGoal = '';
+  String boardNm = '';
+  int dailyGoal = 0;
   String startAt = "";
   String endAt = "";
 
@@ -139,15 +141,8 @@ class _BoardRegister extends State<BoardRegister> {
                 ? datePicker()
                 : TextFormField(
                     validator: (val) {
-                      // if (val!.length == 0) {
-                      //   return '최소 한 글자 이상 입력해주세요';
-                      // }
                       return;
-                      // null;
                     },
-                    // onSaved: (newValue) {
-                    //   changeState(newValue);
-                    // },
                     style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
@@ -165,12 +160,7 @@ class _BoardRegister extends State<BoardRegister> {
                         ? TextInputType.number
                         : TextInputType.text,
                     onChanged: (value) {
-                      // if (formKey.currentState!.validate()) {
-                      //   return;
-                      // } else {
-                      //   formKey.currentState!.save();
                       changeState(value);
-                      // }
                     },
                   ))
       ],
@@ -180,11 +170,12 @@ class _BoardRegister extends State<BoardRegister> {
   Widget mainInput() {
     return Column(
       children: [
-        inputRow("보드의 이름을 지정해주세요", _titleInputFocusNode, _titleInputController,
+        inputRow(
+            "보드의 이름을 지정해주세요", _boardNmInputFocusNode, _boardNmInputController,
             (val) {
           setState(
             () {
-              title = val;
+              boardNm = val;
             },
           );
         }, "board"),
@@ -208,12 +199,13 @@ class _BoardRegister extends State<BoardRegister> {
 
   @override
   Widget build(BuildContext context) {
+    var userState = Provider.of<UserState>(context, listen: false);
     return GestureDetector(
         onTap: () => _dismissKeyboard(),
         child: Scaffold(
             appBar: CustomAppbar(
               title: widget.modify ? '보드 수정하기' : '보드 등록하기',
-              leading: true,
+              leading: widget.modify,
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -234,64 +226,79 @@ class _BoardRegister extends State<BoardRegister> {
                   height: 30,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: userState.boardInfo != null
+                      ? MainAxisAlignment.spaceEvenly
+                      : MainAxisAlignment.center,
                   children: [
-                    InkWell(
-                        onTap: () async {
-                          if (!widget.modify) {
-                            Navigator.pop(context);
-                          } else {
-                            await MMBUtils.twoButtonAlert(
-                                context, '삭제하기', '정말 삭제하시겠습니까?', () async {
-                              // 보드 아이디 바꿔야함
-                              // await CheckerUtils.deleteBoardsAsId(context, 0);
-                              while (Navigator.canPop(context)) {
+                    userState.boardInfo != null
+                        ? InkWell(
+                            onTap: () async {
+                              if (!widget.modify) {
                                 Navigator.pop(context);
+                              } else {
+                                await MMBUtils.twoButtonAlert(
+                                    context, '삭제하기', '정말 삭제하시겠습니까?', () async {
+                                  // 보드 아이디 바꿔야함
+                                  await BoardsUtils.deleteBoard(context, "");
+                                  while (Navigator.canPop(context)) {
+                                    Navigator.pop(context);
+                                  }
+                                });
                               }
-                            });
-                          }
-                        },
-                        child: Container(
-                            padding: EdgeInsets.all(5),
-                            margin: EdgeInsets.only(top: 15),
-                            width: 100,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                    color: DefaultComponents.achive50(),
-                                    width: 2.0)),
-                            child: Text(
-                              widget.modify ? '삭제하기' : '뒤로가기',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ))),
+                            },
+                            child: Container(
+                                padding: EdgeInsets.all(5),
+                                margin: EdgeInsets.only(top: 15),
+                                width: 100,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: DefaultComponents.achive50(),
+                                        width: 2.0)),
+                                child: Text(
+                                  widget.modify ? '삭제하기' : '뒤로가기',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                )))
+                        : Container(),
                     InkWell(
                         onTap: () async {
-                          if (title == '' || dailyGoal == '') {
+                          if (boardNm == '' ||
+                              dailyGoal == '' ||
+                              startAt == '' ||
+                              endAt == '') {
                             return await MMBUtils.oneButtonAlert(
                                 context, "", "필수 입력을 확인하세요");
                           }
-                          if (title.length > 16) {
+                          if (boardNm.length > 16) {
                             return await MMBUtils.oneButtonAlert(
                                 context, "", "보드명은 16자까지입니다.");
                           }
                           var navigationState = Provider.of<NavigationState>(
                               context,
                               listen: false);
-                          Map boardInfo = {
-                            "title": title,
-                            "daily_goal": dailyGoal,
-                            "start_at": startAt,
-                            "end_at": endAt
-                          };
+                          Board boardInfo = Board.fromNamed(
+                            boardNm: boardNm,
+                            daily_goal: dailyGoal,
+                            start_at: startAt,
+                            end_at: endAt,
+                            document_id: '',
+                          );
 
-                          bool postBoardResult =
-                              await CheckerUtils.postBoards(context, boardInfo);
+                          bool postBoardResult;
+                          if (widget.modify) {
+                            postBoardResult = await BoardsUtils.updateBoard(
+                                context, boardInfo);
+                          } else {
+                            postBoardResult =
+                                await BoardsUtils.postBoard(context, boardInfo);
+                          }
                           if (!postBoardResult) {
-                            return MMBUtils.oneButtonAlert(
-                                context, "", "등록에 실패했습니다");
+                            return;
+                            // MMBUtils.oneButtonAlert(
+                            //     context, "", "등록에 실패했습니다");
                           } else {
                             navigationState
                                 .changeState(NavigationStateEnum.home);

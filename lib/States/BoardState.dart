@@ -2,35 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Models/Mission.dart';
 
 class BoardState with ChangeNotifier {
-  int id = 1;
-  String title = '여기를 클릭해보세요!';
-  String start_at = '';
-  String end_at = '';
+  String document_id = '';
+  String boardNm = '여기를 클릭해보세요!';
+  int startAt = 0;
+  int endAt = 0;
   List<Mission> missions = [];
-  int? achievement;
-  DateTime deleted = DateTime.now();
-  DateTime created = DateTime.now();
-  DateTime modified = DateTime.now();
-  int daily_goal = 0;
-  double total_percentage = 0.0;
+  // int? achievement;
+  int? del_dt;
+  bool? del_yn;
+  int? reg_dt;
+  int? mod_dt;
+  int dailyGoal = 0;
+  double totalPercentage = 0.0;
 
-  changeBoardId(int _val) {
-    id = _val;
+  changeBoardId(String _val) {
+    document_id = _val;
     notifyListeners();
   }
 
-  changeBoardTitle(String _val) {
-    title = _val;
+  changeBoardName(String _val) {
+    boardNm = _val;
     notifyListeners();
   }
 
-  changeBoardStartAt(String _val) {
-    start_at = _val;
+  changeBoardStartAt(int _val) {
+    startAt = _val;
     notifyListeners();
   }
 
-  changeBoardEndAt(String _val) {
-    end_at = _val;
+  changeBoardEndAt(int _val) {
+    endAt = _val;
     notifyListeners();
   }
 
@@ -39,33 +40,38 @@ class BoardState with ChangeNotifier {
     notifyListeners();
   }
 
-  changeBoardAchievement(int _val) {
-    achievement = _val;
+  // changeBoardAchievement(int _val) {
+  //   achievement = _val;
+  //   notifyListeners();
+  // }
+
+  changeBoardRegDt(int _val) {
+    reg_dt = _val;
     notifyListeners();
   }
 
-  changeBoardCreated(DateTime _val) {
-    created = _val;
+  changeBoardModDt(int _val) {
+    mod_dt = _val;
     notifyListeners();
   }
 
-  changeBoardModified(DateTime _val) {
-    modified = _val;
+  changeBoardDelDt(int _val) {
+    del_dt = _val;
     notifyListeners();
   }
 
-  changeBoardDeleted(DateTime _val) {
-    deleted = _val;
+  changeBoardDelYn(bool _val) {
+    del_yn = _val;
     notifyListeners();
   }
 
   changeBoardDailyGoal(int _val) {
-    daily_goal = _val;
+    dailyGoal = _val;
     notifyListeners();
   }
 
   changeBoardTotalPercentage(double _val) {
-    total_percentage = _val;
+    totalPercentage = _val;
     notifyListeners();
   }
 }

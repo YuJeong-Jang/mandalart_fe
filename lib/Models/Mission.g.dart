@@ -7,13 +7,22 @@ part of 'Mission.dart';
 // **************************************************************************
 
 Mission _$MissionFromJson(Map<String, dynamic> json) => Mission(
-      (json['id'] as num).toInt(),
-      json['title'] as String,
-      json['board_id'] as String,
-    );
+    json['document_id'] as String,
+    json['mission_name'] as String,
+    json['board_id'] as String,
+    json['reg_dt'] as int?,
+    json['mod_dt'] as int?,
+    json['del_dt'] as int?,
+    json['del_yn'] as bool?,
+    json['actions'] as ActionItem);
 
 Map<String, dynamic> _$MissionToJson(Mission instance) => <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
+      'document_id': instance.document_id,
+      'mission_name': instance.mission_name,
       'board_id': instance.board_id,
+      'reg_dt': instance.reg_dt,
+      'mod_dt': instance.mod_dt,
+      'del_dt': instance.del_dt,
+      'del_yn': instance.del_yn,
+      'actions': instance.actions
     };

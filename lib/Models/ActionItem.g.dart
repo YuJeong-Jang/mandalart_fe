@@ -7,24 +7,26 @@ part of 'ActionItem.dart';
 // **************************************************************************
 
 ActionItem _$ActionItemFromJson(Map<String, dynamic> json) => ActionItem(
-      (json['id'] as num).toInt(),
-      json['title'] as String,
-      (json['mission_id'] as num).toInt(),
+      json['document_id'] as String,
+      json['action_name'] as String,
+      json['mission_doc_id'] as String,
+      json['board_doc_id'] as String,
       json['cycle'] as String,
       (json['goal_unit'] as num).toInt(),
       (json['action_unit'] as num).toInt(),
-      json['unit_name'] as String,
+      json['unit'] as String,
       (json['achievement'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ActionItemToJson(ActionItem instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'mission_id': instance.mission_id,
+      'document_id': instance.document_id,
+      'action_name': instance.action_name,
+      'mission_doc_id': instance.mission_doc_id,
+      'board_doc_id': instance.board_doc_id,
       'cycle': instance.cycle,
       'goal_unit': instance.goal_unit,
       'action_unit': instance.action_unit,
-      'unit_name': instance.unit_name,
+      'unit': instance.unit,
       'achievement': instance.achievement,
     };

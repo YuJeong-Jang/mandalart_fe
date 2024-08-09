@@ -5,6 +5,7 @@ import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
 import 'package:make_me_better_mandalart_fe/Utils/AuthUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CryptoUtils.dart';
+import 'package:make_me_better_mandalart_fe/View/BoardRegister.dart';
 import 'package:make_me_better_mandalart_fe/View/Login.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -201,8 +202,6 @@ class _Join extends State<Join> {
                     )),
                 InkWell(
                     onTap: () async {
-                      var navigationState =
-                          Provider.of<NavigationState>(context, listen: false);
                       setState(() {
                         showLoading = true;
                       });
@@ -236,10 +235,14 @@ class _Join extends State<Join> {
                       setState(() {
                         showLoading = false;
                       });
-                      navigationState.changeState(NavigationStateEnum.home);
                       if (Navigator.of(context).canPop()) {
                         Navigator.of(context).pop();
                       }
+                       Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                BoardRegister(modify: false)));
                     },
                     child: Container(
                         padding: EdgeInsets.all(5),

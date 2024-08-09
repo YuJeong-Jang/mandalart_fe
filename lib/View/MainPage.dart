@@ -195,7 +195,7 @@ class _MainPage extends State<MainPage> {
     var actionState = Provider.of<ActionState>(context, listen: false);
     return Scaffold(
         appBar: CustomAppbar(
-          title: boardState.title,
+          title: boardState.boardNm,
           leading: false,
           preventOnTap: false,
         ),

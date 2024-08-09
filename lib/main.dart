@@ -47,7 +47,6 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        
           debugShowCheckedModeBanner: false,
           title: 'make me better',
           theme: ThemeData(
@@ -62,17 +61,17 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: [Locale('ko', 'KR')],
-          home:
-              // TestPage()
-              FlutterSplashScreen.fadeIn(
-            backgroundColor: Colors.black,
-            childWidget: SizedBox(
-                child: Icon(
-              Icons.view_module,
-              color: Colors.white,
-            )),
-            nextScreen: NavigationSwitcher(),
-          )),
+          home: TestPage()
+          //     FlutterSplashScreen.fadeIn(
+          //   backgroundColor: Colors.black,
+          //   childWidget: SizedBox(
+          //       child: Icon(
+          //     Icons.view_module,
+          //     color: Colors.white,
+          //   )),
+          //   nextScreen: NavigationSwitcher(),
+          // )
+          ),
     );
   }
 }

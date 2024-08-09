@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:make_me_better_mandalart_fe/Components/CustomAppbar.dart';
 import 'package:make_me_better_mandalart_fe/Components/DefaultComponents.dart';
-import 'package:make_me_better_mandalart_fe/Utils/CheckerUtils.dart';
+import 'package:make_me_better_mandalart_fe/Models/ActionItem.dart';
+import 'package:make_me_better_mandalart_fe/States/NavigationState.dart';
+import 'package:make_me_better_mandalart_fe/Utils/ActionsUtils.dart';
+import 'package:make_me_better_mandalart_fe/Utils/BoardsUtils.dart';
 import 'package:make_me_better_mandalart_fe/Utils/CommonUtils.dart';
+import 'package:provider/provider.dart';
 
 class ActionRegister extends StatefulWidget {
   bool modify = false;
@@ -40,8 +44,8 @@ class _ActionRegister extends State<ActionRegister> {
   String mission = '';
   String action = '';
   String setRutine = '';
-  String goalUnit = '';
-  String achiveUnit = '';
+  int goalUnit = 0;
+  int actionUnit = 0;
 
   Map<String, String> dropDownList = <String, String>{
     '엄태구': '엄태구',
@@ -356,23 +360,12 @@ class _ActionRegister extends State<ActionRegister> {
                             await MMBUtils.twoButtonAlert(
                                 context, '삭제하기', '정말 삭제하시겠습니까?', () async {
                               // 액션 아이디 바꿔야함
-                              // await CheckerUtils.deleteActionsAsId(context, 0);
+                              await ActionsUtils.deleteAction(context, "");
                               while (Navigator.canPop(context)) {
                                 Navigator.pop(context);
                               }
                             });
                           }
-                          // if (mission == '' ||
-                          //     action == '' ||
-                          //     rutine == '' ||
-                          //     goalUnit == '') {
-                          //   return await MMBUtils.oneButtonAlert(
-                          //       context, "", "필수 입력을 확인하세요");
-                          // }
-                          // if (rutine != goalUnit) {
-                          //   return await MMBUtils.oneButtonAlert(
-                          //       context, "", "비밀번호를 확인하세요");
-                          // }
                         },
                         child: Container(
                             padding: EdgeInsets.all(5),
@@ -398,6 +391,39 @@ class _ActionRegister extends State<ActionRegister> {
                               goalUnit == '') {
                             return await MMBUtils.oneButtonAlert(
                                 context, "", "필수 입력을 확인하세요");
+                          }
+                          var navigationState = Provider.of<NavigationState>(
+                              context,
+                              listen: false);
+                          ActionItem actionInfo = ActionItem.fromNamed(
+                            document_id: '',
+                            action_name: action,
+                            mission_doc_id: '',
+                            cycle: setRutine,
+                            board_doc_id: '',
+                            action_unit: actionUnit,
+                            goal_unit: goalUnit,
+                            unit: '',
+                          );
+
+                          bool postActionResult;
+                          if (widget.modify) {
+                            postActionResult = await ActionsUtils.updateAction(
+                                context, actionInfo);
+                          } else {
+                            postActionResult = await ActionsUtils.postAction(
+                                context, actionInfo);
+                          }
+                          if (!postActionResult) {
+                            return;
+                            // MMBUtils.oneButtonAlert(
+                            //     context, "", "등록에 실패했습니다");
+                          } else {
+                            navigationState
+                                .changeState(NavigationStateEnum.home);
+                            if (Navigator.of(context).canPop()) {
+                              Navigator.of(context).pop();
+                            }
                           }
                         },
                         child: Container(

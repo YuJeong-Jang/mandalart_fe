@@ -8,7 +8,7 @@ class UserState with ChangeNotifier {
   String? pwd;
   int? pwd_mod_dt;
   String? token;
-  Map? boardInfo;
+  Board? boardInfo;
   int? reg_dt;
   int? mod_dt;
 
@@ -42,7 +42,7 @@ class UserState with ChangeNotifier {
     notifyListeners();
   }
 
-  changeBoardInfo(Map _val) {
+  changeBoardInfo(Board _val) {
     boardInfo = _val;
     notifyListeners();
   }
